@@ -1,0 +1,100 @@
+{
+  "id": "transfer-component",
+  "name": "Transfer Component",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/101digital/transfer-component.git"
+  },
+  "config": {
+    "env": {
+      "development": {
+        "paymentBaseUrl": "https://api-ud-ow-dev.101digital.io/payment-service/1.0.0",
+        "contactBaseUrl": "https://api-ud-ow-dev.101digital.io/contact-service/1.0.0"
+      },
+      "staging": {
+        "paymentBaseUrl": "https://api-ud-ow-dev.101digital.io/payment-service/1.0.0",
+        "contactBaseUrl": "https://api-ud-ow-dev.101digital.io/contact-service/1.0.0"
+      },
+      "production": {
+        "paymentBaseUrl": "https://api-ud-ow-dev.101digital.io/payment-service/1.0.0",
+        "contactBaseUrl": "https://api-ud-ow-dev.101digital.io/contact-service/1.0.0"
+      }
+    }
+  },
+  "dependencies": [],
+  "templates": [],
+  "texts": {
+    "input_transfer_component": {
+      "lbl_header_title": "Send now to",
+      "lbl_header_subtitle": "Please enter recipient's details below.",
+      "lbl_account_number": "Account number",
+      "plh_account_number": "Enter account number",
+      "lbl_account_name": "Account name",
+      "plh_account_name": "Enter account name",
+      "lbl_enter_amount": "Enter amount (min. of Php 1)",
+      "plh_enter_amount": "Enter amount",
+      "lbl_purpose_transfer": "Purpose of transfer",
+      "plh_select_purpose_transfer": "Select a purpose",
+      "plh_enter_purpose_transfer": "Enter purpose of transfer",
+      "lbl_note": "Note to recipient (Optional)",
+      "plh_note": "Add note",
+      "btn_next": "Next",
+      "btn_select": "Select"
+    },
+    "review_transfer_component": {
+      "lbl_header_title": "Review transfer",
+      "lbl_header_subtitle": "Please make sure all account details are correct. Your account will be debited and this transaction will be irreversible once confirmed.",
+      "btn_confirm_transaction": "Confirm transaction"
+    },
+    "detail_transfer_component": {
+      "lbl_from": "From",
+      "lbl_send_money_to": "Send money to",
+      "lbl_when": "When",
+      "lbl_purpose_transfer": "Purpose of transfer",
+      "lbl_note": "Note to recipient",
+      "lbl_amount": "Amount",
+      "lbl_transaction_fee": "Transaction Fee",
+      "lbl_total_amount": "Total amount"
+    },
+    "authorize_transfer_component": {
+      "lbl_header_title": "Please enter your passcode",
+      "lbl_header_subtitle": "Enter the One-Time Password (OTP) sent on your registered mobile number.",
+      "lbl_didnt_receive_otp": "Didn't receive a code? ",
+      "lbl_duration_format": "Send another (in %s sec)",
+      "btn_send_another": "Send another",
+      "btn_continue": "Continue"
+    },
+    "transfer_status_component": {
+      "lbl_hang_on": "Hang on for a moment",
+      "msg_hang_on_transaction": "We're currently setting up your transaction.",
+      "lbl_transfer_unsuccessful": "Transfer Request\nUnsuccessful!",
+      "msg_transfer_unsuccessful": "Your money has been returned to your Pitaka. Please try again at a later time.",
+      "btn_back_to_top": "Back to My Pitaka",
+      "lbl_transfer_successful": "Transfer Request\nSuccessful!",
+      "msg_transfer_successful": "Your money is on its way and should arrive instantly.",
+      "lbl_transaction_date": "Transaction Date / Time",
+      "lbl_reference_no": "Reference No.",
+      "btn_add_contact": "Add to contacts",
+      "msg_contact_add_successful": "Contact is added successful"
+    },
+    "select_ud_account_component": {
+      "lbl_header_title": "Send to another\nUnionDigital account",
+      "lbl_header_subtitle": "Who are you sending your money to?",
+      "btn_new_recipient": "New Recipient",
+      "lbl_recent_contact": "Recent Contacts",
+      "btn_view_all": "View all"
+    },
+    "new_recipient_component": {
+      "lbl_header_title": "New Recipient",
+      "lbl_header_subtitle": "Please enter recipient's mobile no. or account number.",
+      "lbl_send_money_to": "Send money to",
+      "btn_mobile": "Mobile",
+      "btn_account": "Account",
+      "lbl_mobile_number": "Mobile number",
+      "lbl_account_number": "UD account number",
+      "plh_mobile_number": "ex. 09123456789 or +639123456789",
+      "plh_account_number": "Enter UD account number",
+      "btn_proceed": "Proceed"
+    }
+  }
+}
