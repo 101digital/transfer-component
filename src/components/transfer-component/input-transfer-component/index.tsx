@@ -50,22 +50,13 @@ const InputTransferComponent = ({
   const [openPurposeModal, setOpenPurposeModal] = useState(false);
 
   useEffect(() => {
-    if (transferDetails) {
-      formikRef?.current?.setFieldValue('accountNumber', transferDetails.accountNumber);
-      formikRef?.current?.setFieldValue('accountName', transferDetails.accountName);
-      formikRef?.current?.setFieldValue('accountId', transferDetails.accountId);
-      formikRef?.current?.setFieldValue('amount', transferDetails.amount);
-      formikRef?.current?.setFieldValue('purposeTransfer', transferDetails.purpose);
-      formikRef?.current?.setFieldValue('otherPurposeTransfer', transferDetails.otherPurpose);
-      formikRef?.current?.setFieldValue('note', transferDetails.note);
-      formikRef?.current?.validateForm();
-      return;
-    }
-    if (recipient) {
+    if (recipient && !transferDetails) {
       formikRef?.current?.setFieldValue('accountNumber', recipient.accountNumber);
       formikRef?.current?.setFieldValue('accountName', recipient.displayName);
       formikRef?.current?.setFieldValue('accountId', recipient.paymentReference);
-      formikRef?.current?.validateForm();
+      setTimeout(() => {
+        formikRef?.current?.validateForm();
+      }, 0);
     }
   }, [recipient, transferDetails]);
 
@@ -80,7 +71,19 @@ const InputTransferComponent = ({
       <Formik
         innerRef={formikRef}
         enableReinitialize={true}
-        initialValues={InputPaymentData.empty()}
+        initialValues={
+          transferDetails
+            ? InputPaymentData.initial(
+                transferDetails.accountName,
+                transferDetails.accountNumber,
+                transferDetails.accountId,
+                transferDetails.amount.toFixed(2),
+                transferDetails.purpose,
+                transferDetails.note,
+                transferDetails.otherPurpose
+              )
+            : InputPaymentData.empty()
+        }
         validationSchema={InputPaymentSchema(maxAmount, currencyOption)}
         onSubmit={(values) => {
           onSubmit({

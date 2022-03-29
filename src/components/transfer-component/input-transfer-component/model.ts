@@ -15,6 +15,26 @@ export class InputPaymentData {
   static empty(): InputPaymentData {
     return new InputPaymentData('', '', '', '', '');
   }
+
+  static initial(
+    accountNumber: string,
+    accountName: string,
+    accountId: string,
+    amount: string,
+    purposeTransfer?: string,
+    note?: string,
+    otherPurposeTransfer?: string
+  ): InputPaymentData {
+    return new InputPaymentData(
+      accountNumber,
+      accountName,
+      accountId,
+      amount,
+      purposeTransfer ?? '',
+      note,
+      otherPurposeTransfer
+    );
+  }
 }
 
 export const InputPaymentSchema = (maxAmount: number, paymentOption: any) =>
