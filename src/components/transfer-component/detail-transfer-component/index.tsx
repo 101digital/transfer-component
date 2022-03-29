@@ -19,6 +19,10 @@ export type DetailsTransferComponentStyles = {
 const DetailsTransferComponent = ({ style, details }: DetailsTransferComponentProps) => {
   const styles: DetailsTransferComponentStyles = useMergeStyles(style);
   const { colors, i18n } = useContext(ThemeContext);
+
+  const _purpose =
+    details.purpose === 'Others' ? `${details.purpose}\n${details.otherPurpose}` : details.purpose;
+
   return (
     <View style={styles.containerStyle}>
       <Text style={styles.labelTextStyle}>
@@ -30,12 +34,12 @@ const DetailsTransferComponent = ({ style, details }: DetailsTransferComponentPr
       </Text>
       <Text style={styles.valueTextStyle}>{details.accountName}</Text>
       <Text style={styles.valueTextStyle}>{details.accountNumber}</Text>
-      {!isEmpty(details.purpose) && (
+      {!isEmpty(_purpose) && (
         <>
           <Text style={styles.labelTextStyle}>
             {i18n?.t('detail_transfer_component.lbl_purpose_transfer') ?? 'Purpose of transfer'}
           </Text>
-          <Text style={styles.valueTextStyle}>{details.purpose}</Text>
+          <Text style={styles.valueTextStyle}>{_purpose}</Text>
         </>
       )}
       {!isEmpty(details.note) && (

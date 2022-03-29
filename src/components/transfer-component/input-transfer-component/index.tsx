@@ -18,6 +18,7 @@ import useMergeStyles from './styles';
 
 export type InputTransferComponentProps = {
   style?: InputTransferComponentStyles;
+  transferDetails?: TransferDetails;
   recipient?: Recipient;
   maxAmount: number;
   currencyCode: string;
@@ -39,6 +40,7 @@ const InputTransferComponent = ({
   maxAmount,
   onSubmit,
   currencyCode,
+  transferDetails,
 }: InputTransferComponentProps) => {
   const styles: InputTransferComponentStyles = useMergeStyles(style);
   const { colors, i18n } = useContext(ThemeContext);
@@ -48,13 +50,24 @@ const InputTransferComponent = ({
   const [openPurposeModal, setOpenPurposeModal] = useState(false);
 
   useEffect(() => {
+    if (transferDetails) {
+      formikRef?.current?.setFieldValue('accountNumber', transferDetails.accountNumber);
+      formikRef?.current?.setFieldValue('accountName', transferDetails.accountName);
+      formikRef?.current?.setFieldValue('accountId', transferDetails.accountId);
+      formikRef?.current?.setFieldValue('amount', transferDetails.amount);
+      formikRef?.current?.setFieldValue('purposeTransfer', transferDetails.purpose);
+      formikRef?.current?.setFieldValue('otherPurposeTransfer', transferDetails.otherPurpose);
+      formikRef?.current?.setFieldValue('note', transferDetails.note);
+      formikRef?.current?.validateForm();
+      return;
+    }
     if (recipient) {
       formikRef?.current?.setFieldValue('accountNumber', recipient.accountNumber);
       formikRef?.current?.setFieldValue('accountName', recipient.displayName);
       formikRef?.current?.setFieldValue('accountId', recipient.paymentReference);
       formikRef?.current?.validateForm();
     }
-  }, [recipient]);
+  }, [recipient, transferDetails]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -73,10 +86,8 @@ const InputTransferComponent = ({
           onSubmit({
             ...values,
             amount: getAmountRawValue(values.amount, currencyOption),
-            purpose:
-              values.purposeTransfer === 'Others'
-                ? `${values.purposeTransfer}\n${values.otherPurposeTransfer}`
-                : values.purposeTransfer,
+            purpose: values.purposeTransfer,
+            otherPurpose: values.otherPurposeTransfer,
             currencyCode,
           });
         }}
@@ -86,7 +97,7 @@ const InputTransferComponent = ({
           return (
             <View style={styles.containerStyle}>
               <KeyboardAwareScrollView
-                keyboardShouldPersistTaps="handled"
+                keyboardShouldPersistTaps='handled'
                 style={styles.contentContainerStyle}
                 keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
                 showsVerticalScrollIndicator={false}
@@ -101,7 +112,7 @@ const InputTransferComponent = ({
                     i18n?.t('input_transfer_component.plh_account_number') ?? 'Enter account number'
                   }
                   maxLength={100}
-                  keyboardType="number-pad"
+                  keyboardType='number-pad'
                   editable={recipient === undefined}
                 />
                 <Text style={styles.labelTextStyle}>
@@ -143,7 +154,7 @@ const InputTransferComponent = ({
                       i18n?.t('input_transfer_component.plh_select_purpose_transfer') ??
                       'Select a purpose'
                     }
-                    pointerEvents="none"
+                    pointerEvents='none'
                     editable={false}
                     suffixIcon={
                       <View style={styles.suffixContainerStyle}>

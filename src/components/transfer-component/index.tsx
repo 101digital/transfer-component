@@ -152,6 +152,7 @@ const TransferComponent = forwardRef((props: TransferComponentProps, ref) => {
       )}
       {step === TransferStep.initial && (
         <InputTransferComponent
+          transferDetails={transferDetails}
           recipient={recipient}
           maxAmount={maxAmount}
           currencyCode={currencyCode}

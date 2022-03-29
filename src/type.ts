@@ -16,6 +16,7 @@ export interface TransferDetails {
   purpose?: string;
   note?: string;
   currencyCode: string;
+  otherPurpose?: string;
 }
 
 export interface TransferResponse {
