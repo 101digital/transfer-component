@@ -1,6 +1,6 @@
 export { TransferService } from './src/service/transfer-service';
 export { TransferContext } from './src/context/transfer-context';
-export { default as CustomerProvider } from './src/context/transfer-provider';
+export { default as TransferProvider } from './src/context/transfer-provider';
 export * from './src/type'
 export * from './src/assets'
 export { default as TransferComponent } from './src/components/transfer-component';
