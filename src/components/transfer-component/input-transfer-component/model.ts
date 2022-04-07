@@ -34,4 +34,5 @@ export const InputPaymentSchema = () =>
   Yup.object().shape({
     accountNumber: Yup.string().trim().required('Please enter account number'),
     accountName: Yup.string().trim().required('Please enter account name'),
+    purposeTransfer: Yup.string().trim().required('Please select purpose of transfer'),
   });
