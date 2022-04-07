@@ -42,8 +42,9 @@ const TransferStatusComponent = ({
 }: TransferStatusComponentProps) => {
   const styles: TransferStatusComponentStyles = useMergeStyles(style);
   const [status, setStatus] = useState<TransferStatus>(TransferStatus.progressing);
-  const { transferResponse, errorAuthorizeTransfer, clearTransferResponse } =
-    useContext(TransferContext);
+  const { transferResponse, errorAuthorizeTransfer, clearTransferResponse } = useContext(
+    TransferContext
+  );
 
   useEffect(() => {
     onChangedStatus(status);
@@ -56,7 +57,11 @@ const TransferStatusComponent = ({
   }, []);
 
   useEffect(() => {
-    if (transferResponse && transferResponse.status === 'AcceptedSettlementInProcess') {
+    if (
+      transferResponse &&
+      (transferResponse.status === 'AcceptedSettlementInProcess' ||
+        transferResponse.status === 'Pending')
+    ) {
       setStatus(TransferStatus.success);
     }
   }, [transferResponse]);

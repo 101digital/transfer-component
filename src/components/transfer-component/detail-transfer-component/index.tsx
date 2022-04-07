@@ -32,6 +32,7 @@ const DetailsTransferComponent = ({ style, details }: DetailsTransferComponentPr
       <Text style={styles.labelTextStyle}>
         {i18n?.t('detail_transfer_component.lbl_send_money_to') ?? 'Send money to'}
       </Text>
+      {details.bankName && <Text style={styles.valueTextStyle}>{details.bankName}</Text>}
       <Text style={styles.valueTextStyle}>{details.accountName}</Text>
       <Text style={styles.valueTextStyle}>{details.accountNumber}</Text>
       {!isEmpty(_purpose) && (
@@ -50,25 +51,43 @@ const DetailsTransferComponent = ({ style, details }: DetailsTransferComponentPr
           <Text style={styles.valueTextStyle}>{details.note}</Text>
         </>
       )}
-      <Text style={styles.labelTextStyle}>
-        {i18n?.t('detail_transfer_component.lbl_when') ?? 'When'}
-      </Text>
-      <Text style={styles.valueTextStyle}>Send instantly</Text>
+      {details.provider === undefined ? (
+        <>
+          <Text style={styles.labelTextStyle}>
+            {i18n?.t('detail_transfer_component.lbl_when') ?? 'When'}
+          </Text>
+          <Text style={styles.valueTextStyle}>{'Send instantly'}</Text>
+        </>
+      ) : (
+        <>
+          <Text style={styles.labelTextStyle}>
+            {i18n?.t('detail_transfer_component.lbl_send_via') ?? 'Send via'}
+          </Text>
+          <Text style={styles.valueTextStyle}>{details.charge?.Provider}</Text>
+        </>
+      )}
       <Text style={styles.labelTextStyle}>
         {i18n?.t('detail_transfer_component.lbl_amount') ?? 'Amount'}
       </Text>
       <Text style={styles.valueTextStyle}>
-        {useCurrencyFormat(details.amount, details.currencyCode)}
+        {useCurrencyFormat(details.amount ?? 0, details.currencyCode ?? 'USD')}
       </Text>
       <Text style={styles.labelTextStyle}>
-        {i18n?.t('detail_transfer_component.lbl_transaction_fee') ?? 'Transaction Fee'}
+        {i18n?.t('detail_transfer_component.lbl_free') ?? 'Transaction Fee'}
       </Text>
-      <Text style={styles.valueTextStyle}>{'FREE'}</Text>
+      <Text style={styles.valueTextStyle}>
+        {details.charge?.Fee === 0
+          ? i18n?.t('detail_transfer_component.lbl_free') ?? 'FREE'
+          : useCurrencyFormat(details.amount ?? 0, details.currencyCode ?? 'USD')}
+      </Text>
       <Text style={styles.labelTextStyle}>
         {i18n?.t('detail_transfer_component.lbl_total_amount') ?? 'Total amount'}
       </Text>
       <Text style={[styles.valueTextStyle, { color: colors.primaryColor }]}>
-        {useCurrencyFormat(details.amount, details.currencyCode)}
+        {useCurrencyFormat(
+          (details.amount ?? 0) + (details.charge?.Fee ?? 0),
+          details.currencyCode ?? 'USD'
+        )}
       </Text>
     </View>
   );

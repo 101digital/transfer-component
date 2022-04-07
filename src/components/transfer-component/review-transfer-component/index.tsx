@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ScrollView, StyleProp, View, ViewStyle } from 'react-native';
-import { Button } from 'react-native-theme-component';
+import { Button, ThemeContext } from 'react-native-theme-component';
 import { TransferContext } from '../../../context/transfer-context';
 import { TransferDetails } from '../../../type';
 import DetailsTransferComponent, {
@@ -27,8 +27,19 @@ const ReviewTransferComponent = ({
   userAccountId,
 }: ReviewTransferComponentProps) => {
   const styles: ReviewTransferComponentStyles = useMergeStyles(style);
-  const { accountName, accountId, amount, purpose, note, currencyCode } = transferDetail;
+  const {
+    accountName,
+    accountId,
+    amount,
+    purpose,
+    note,
+    currencyCode,
+    provider,
+    otherPurpose,
+    accountNumber,
+  } = transferDetail;
   const { isInitialingTransfer, initTransfer } = useContext(TransferContext);
+  const { i18n } = useContext(ThemeContext);
 
   return (
     <>
@@ -41,24 +52,25 @@ const ReviewTransferComponent = ({
         </ScrollView>
         <View style={styles.footerContainerStyle}>
           <Button
-            label="Confirm transaction"
+            label={
+              i18n?.t('review_transfer_component.btn_confirm_transaction') ?? 'Confirm transaction'
+            }
             isLoading={isInitialingTransfer}
             onPress={() => {
-              initTransfer(
-                amount,
-                currencyCode,
-                {
-                  accountId: userAccountId,
-                  schemeName: 'PH.PlatformDefined.Id',
-                },
-                {
-                  accountId,
-                  schemeName: 'PH.PlatformDefined.Id',
-                  name: accountName,
-                },
-                purpose,
-                note
-              );
+              const creaditorAccId = provider ? accountNumber : accountId;
+              if (creaditorAccId && accountName && amount && currencyCode) {
+                initTransfer(
+                  amount,
+                  currencyCode,
+                  userAccountId,
+                  creaditorAccId,
+                  accountName,
+                  provider,
+                  purpose,
+                  otherPurpose,
+                  note
+                );
+              }
             }}
           />
         </View>

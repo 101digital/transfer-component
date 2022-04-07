@@ -52,8 +52,9 @@ const TransferSuccessComponent = ({
 }: TransferSuccessComponentProps) => {
   const styles: TransferSuccessComponentStyles = useMergeStyles(style);
   const { colors, i18n } = useContext(ThemeContext);
-  const { transferResponse, addContact, isAddingContact, isAddedContact, getContacts } =
-    useContext(TransferContext);
+  const { transferResponse, addContact, isAddingContact, isAddedContact, getContacts } = useContext(
+    TransferContext
+  );
 
   const _addContactButtonColor = isFromContact ? '#BAB7BB' : colors.primaryButtonColor;
   const _dateFormat = transactionDateFormat ?? 'MMM D, YYYY / HH:mm A';
@@ -111,11 +112,17 @@ const TransferSuccessComponent = ({
           disabled={isFromContact}
           style={[styles.addContactButton, { borderColor: _addContactButtonColor }]}
           onPress={() => {
-            addContact(
-              transferDetails.accountId,
-              transferDetails.accountNumber,
-              transferDetails.accountName
-            );
+            if (
+              transferDetails.accountId &&
+              transferDetails.accountName &&
+              transferDetails.accountNumber
+            ) {
+              addContact(
+                transferDetails.accountId,
+                transferDetails.accountNumber,
+                transferDetails.accountName
+              );
+            }
           }}
         >
           {isAddingContact && <ActivityIndicator color={_addContactButtonColor} />}

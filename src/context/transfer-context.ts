@@ -1,6 +1,6 @@
-import { TransferService } from './../service/transfer-service';
+import { TransferService } from '../service/transfer-service';
 import React, { useCallback, useMemo, useState } from 'react';
-import { Recipient, TransferResponse } from '../type';
+import { EBank, PaymentMethod, PaymentProvider, Recipient, TransferResponse } from '../type';
 
 const transferService = TransferService.instance();
 
@@ -9,16 +9,12 @@ export interface TransferContextData {
   initTransfer: (
     amount: number,
     currency: string,
-    debtor: {
-      accountId: string;
-      schemeName: string;
-    },
-    creditor: {
-      accountId: string;
-      name: string;
-      schemeName: string;
-    },
+    debtorAccountId: string,
+    creditorAccountId: string,
+    creditorName: string,
+    provider?: PaymentProvider,
     transferPurpose?: string,
+    otherPurpose?: string,
     note?: string
   ) => void;
   transferResponse?: TransferResponse;
@@ -44,6 +40,14 @@ export interface TransferContextData {
   addContact: (accountId: string, accountNumber: string, displayName: string) => void;
   isAddedContact: boolean;
   errorAddContact?: Error;
+  getPaymentMethod: () => void;
+  isLoadingPaymentMethod: boolean;
+  paymentMethods: PaymentMethod[];
+  setPaymentMethod: (method: PaymentMethod) => void;
+  paymentMethod?: PaymentMethod;
+  eBanks: EBank[];
+  isLoadingBank: boolean;
+  getEBanks: () => void;
 }
 
 export const transferDefaultValue: TransferContextData = {
@@ -65,6 +69,13 @@ export const transferDefaultValue: TransferContextData = {
   isAddingContact: false,
   addContact: () => null,
   isAddedContact: false,
+  paymentMethods: [],
+  getPaymentMethod: () => null,
+  isLoadingPaymentMethod: false,
+  setPaymentMethod: () => null,
+  eBanks: [],
+  getEBanks: () => null,
+  isLoadingBank: false,
 };
 
 export const TransferContext = React.createContext<TransferContextData>(transferDefaultValue);
@@ -95,6 +106,13 @@ export function useTransferContextValue(): TransferContextData {
   const [_errorAddContact, setErrorAddContact] = useState<Error | undefined>(undefined);
   const [_isAddedContact, setAddedContact] = useState(false);
 
+  const [_isLoadingPaymentMethod, setLoadingPaymentMethods] = useState(false);
+  const [_paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
+  const [_paymentMethod, _setPaymentMethod] = useState<PaymentMethod | undefined>(undefined);
+
+  const [_isLoadingEBank, setLoadingEBank] = useState(false);
+  const [_eBanks, setEBanks] = useState<EBank[]>([]);
+
   const addContact = useCallback(
     async (accountId: string, accountNumber: string, displayName: string) => {
       try {
@@ -124,30 +142,48 @@ export function useTransferContextValue(): TransferContextData {
     }
   }, []);
 
+  const getSchemeByProvider = (provider?: string) => {
+    const schemes = transferService.getSchemes()!;
+    switch (provider) {
+      case 'Pesonet':
+        return schemes.pesonetScheme;
+      case 'Instapay':
+        return schemes.instapayScheme;
+      default:
+        return schemes.udScheme;
+    }
+  };
+
   const initTransfer = useCallback(
     async (
       amount: number,
       currency: string,
-      debtor: {
-        accountId: string;
-        schemeName: string;
-      },
-      creditor: {
-        accountId: string;
-        name: string;
-        schemeName: string;
-      },
+      debtorAccountId: string,
+      creditorAccountId: string,
+      creditorName: string,
+      provider?: PaymentProvider,
       transferPurpose?: string,
+      otherPurpose?: string,
       note?: string
     ) => {
       try {
         setInitialingTransfer(true);
         const { Data } = await transferService.initTransfer(
+          provider?.name ?? 'UD',
           amount,
           currency,
-          debtor,
-          creditor,
+          {
+            accountId: debtorAccountId,
+            schemeName: getSchemeByProvider('UD'),
+          },
+          {
+            accountId: creditorAccountId,
+            name: creditorName,
+            schemeName: getSchemeByProvider(provider?.name),
+          },
+          provider?.code,
           transferPurpose,
+          otherPurpose,
           note
         );
         setInitialingTransfer(false);
@@ -281,6 +317,32 @@ export function useTransferContextValue(): TransferContextData {
     setRecipient(undefined);
   }, []);
 
+  const getPaymentMethod = useCallback(async () => {
+    try {
+      setLoadingPaymentMethods(true);
+      const { Data } = await transferService.getPaymentMethod();
+      setPaymentMethods(Data);
+      setLoadingPaymentMethods(false);
+    } catch (error) {
+      setLoadingPaymentMethods(false);
+    }
+  }, []);
+
+  const setPaymentMethod = useCallback((method) => {
+    _setPaymentMethod(method);
+  }, []);
+
+  const getEBanks = useCallback(async () => {
+    try {
+      setLoadingEBank(true);
+      const { data } = await transferService.getEBanks();
+      setEBanks(data);
+      setLoadingEBank(false);
+    } catch (error) {
+      setLoadingEBank(false);
+    }
+  }, []);
+
   return useMemo(
     () => ({
       initTransfer,
@@ -308,8 +370,21 @@ export function useTransferContextValue(): TransferContextData {
       isAddedContact: _isAddedContact,
       isAddingContact: _isAddingContact,
       errorAddContact: _errorAddContact,
+      getPaymentMethod,
+      isLoadingPaymentMethod: _isLoadingPaymentMethod,
+      paymentMethods: _paymentMethods,
+      setPaymentMethod,
+      paymentMethod: _paymentMethod,
+      getEBanks,
+      eBanks: _eBanks,
+      isLoadingBank: _isLoadingEBank,
     }),
     [
+      _isLoadingEBank,
+      _eBanks,
+      _paymentMethod,
+      _isLoadingPaymentMethod,
+      _paymentMethods,
       _isAddedContact,
       _isAddingContact,
       _errorAddContact,

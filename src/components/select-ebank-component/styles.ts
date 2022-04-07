@@ -2,47 +2,49 @@ import { defaultsDeep } from 'lodash';
 import { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { ThemeContext } from 'react-native-theme-component';
-import { TransferComponentStyles } from '.';
+import { SelectEBankComponentStyles } from '.';
 
-const useMergeStyles = (style?: TransferComponentStyles): TransferComponentStyles => {
+const useMergeStyles = (style?: SelectEBankComponentStyles): SelectEBankComponentStyles => {
   const { colors, fonts } = useContext(ThemeContext);
 
-  const defaultStyles: TransferComponentStyles = StyleSheet.create({
+  const defaultStyles: SelectEBankComponentStyles = StyleSheet.create({
     containerStyle: {
       flex: 1,
+      paddingHorizontal: 24,
     },
     headerTitleStyle: {
       lineHeight: 36,
       color: colors.primaryColor,
       fontFamily: fonts.bold,
       fontSize: 24,
-      paddingHorizontal: 24,
     },
-    headerSubTitleStyle: {
+    subTitleStyle: {
       fontFamily: fonts.medium,
       fontSize: 14,
       lineHeight: 24,
       color: colors.secondaryTextColor,
       marginTop: 20,
-      paddingHorizontal: 24,
     },
-    headerContainerStyle: {
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    leftButtonStyle: {
-      paddingVertical: 20,
-      paddingHorizontal: 24,
-    },
-    rightButtonStyle: {
-      paddingVertical: 15,
-      paddingHorizontal: 24,
-    },
-    rightButtonTitleStyle: {
+    emptyResultTextStyle: {
       fontFamily: fonts.bold,
-      fontSize: 14,
-      textDecorationLine: 'underline',
-      color: '#FF9800',
+      fontSize: 16,
+      lineHeight: 24,
+      textAlign: 'center',
+      marginTop: 79,
+    },
+    eBankListStyle: {
+      marginTop: 8,
+    },
+    sectionTextStyle: {
+      fontFamily: fonts.bold,
+      fontSize: 12,
+      lineHeight: 24,
+      color: '#7F7B82',
+      marginTop: 12,
+      marginBottom: 8,
+    },
+    loadingIndicatorStyle: {
+      marginVertical: 20,
     },
   });
 

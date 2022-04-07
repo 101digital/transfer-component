@@ -6,13 +6,24 @@ import React, {
   useImperativeHandle,
   useState,
 } from 'react';
-import { StyleProp, Text, TextStyle, View, ViewStyle } from 'react-native';
+import {
+  SafeAreaView,
+  StyleProp,
+  StyleSheet,
+  Text,
+  TextStyle,
+  TouchableOpacity,
+  View,
+  ViewStyle,
+} from 'react-native';
 import { ThemeContext } from 'react-native-theme-component';
+import { ArrowBack } from '../../assets/icons';
 import { TransferContext } from '../../context/transfer-context';
-import { Recipient, TransferDetails, TransferStatus } from '../../type';
+import { EBank, Recipient, TransferDetails, TransferStatus } from '../../type';
 import AuthorizeTransferComponent, {
   AuthorizeTransferComponentStyles,
 } from './authorize-transfer-component';
+import InputAmountComponent from './input-amount-component';
 import InputTransferComponent, { InputTransferComponentStyles } from './input-transfer-component';
 import ReviewTransferComponent, {
   ReviewTransferComponentStyles,
@@ -24,11 +35,14 @@ import TransferStatusComponent, {
 
 export type TransferComponentProps = {
   recipient?: Recipient;
+  eBank?: EBank;
   companyIcon?: ReactNode;
   isFromContact?: boolean;
   userAccountId: string;
-  maxAmount: number;
   onDone: () => void;
+  onCancel: () => void;
+  onShare?: () => void;
+  backIcon?: (step: TransferStep) => ReactNode;
   currencyCode: string;
   transactionDateFormat?: string;
   style?: TransferComponentStyles;
@@ -40,6 +54,10 @@ export type TransferComponentStyles = {
   containerStyle?: StyleProp<ViewStyle>;
   headerTitleStyle?: StyleProp<TextStyle>;
   headerSubTitleStyle?: StyleProp<TextStyle>;
+  headerContainerStyle?: StyleProp<ViewStyle>;
+  leftButtonStyle?: StyleProp<ViewStyle>;
+  rightButtonStyle?: StyleProp<ViewStyle>;
+  rightButtonTitleStyle?: StyleProp<TextStyle>;
   inputTransferComponentStyle?: InputTransferComponentStyles;
   reviewTransferComponentStyle?: ReviewTransferComponentStyles;
   authorizeTransferComponentStyle?: AuthorizeTransferComponentStyles;
@@ -47,6 +65,7 @@ export type TransferComponentStyles = {
 };
 
 export enum TransferStep {
+  inputAmount,
   initial,
   review,
   authorize,
@@ -55,6 +74,7 @@ export enum TransferStep {
 
 export type TransferComponentRef = {
   changeStep: (step: TransferStep) => void;
+  backToPrevious: () => void;
 };
 
 const TransferComponent = forwardRef((props: TransferComponentProps, ref) => {
@@ -64,22 +84,28 @@ const TransferComponent = forwardRef((props: TransferComponentProps, ref) => {
     recipient,
     isFromContact,
     userAccountId,
-    maxAmount,
     onDone,
     onChangedStatus,
     currencyCode,
     companyIcon,
     transactionDateFormat,
+    eBank,
+    onCancel,
+    onShare,
+    backIcon,
   } = props;
   const styles: TransferComponentStyles = useMergeStyles(style);
-  const [step, setStep] = useState<TransferStep>(TransferStep.initial);
+  const [step, setStep] = useState<TransferStep>(TransferStep.inputAmount);
+  const [status, setStatus] = useState<TransferStatus>(TransferStatus.progressing);
   const { transferResponse, isAuthorizingTransfer } = useContext(TransferContext);
   const [transferDetails, setTransferDetails] = useState<TransferDetails | undefined>(undefined);
   const { i18n } = useContext(ThemeContext);
 
   useEffect(() => {
     return () => {
-      setStep(TransferStep.initial);
+      setStep(TransferStep.inputAmount);
+      setTransferDetails(undefined);
+      setStatus(TransferStatus.progressing);
     };
   }, []);
 
@@ -103,6 +129,7 @@ const TransferComponent = forwardRef((props: TransferComponentProps, ref) => {
     ref,
     (): TransferComponentRef => ({
       changeStep,
+      backToPrevious,
     })
   );
 
@@ -110,8 +137,25 @@ const TransferComponent = forwardRef((props: TransferComponentProps, ref) => {
     setStep(_step);
   };
 
+  const backToPrevious = () => {
+    if (step === TransferStep.inputAmount) {
+      onCancel();
+    } else if (step === TransferStep.initial) {
+      setStep(TransferStep.inputAmount);
+    } else if (step === TransferStep.review) {
+      setStep(TransferStep.initial);
+    } else if (step === TransferStep.authorize) {
+      setStep(TransferStep.review);
+    }
+  };
+
   const getStepHeaderInformation = () => {
     switch (step) {
+      case TransferStep.inputAmount:
+        return {
+          title: i18n?.t('input_amount_component.lbl_header_title') ?? 'Enter amount to send',
+          subTitle: undefined,
+        };
       case TransferStep.initial:
         return {
           title: i18n?.t('input_transfer_component.lbl_header_title') ?? 'Send now to',
@@ -144,21 +188,63 @@ const TransferComponent = forwardRef((props: TransferComponentProps, ref) => {
 
   return (
     <View style={styles.containerStyle}>
+      <SafeAreaView style={styles.headerContainerStyle}>
+        {step !== TransferStep.status && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.leftButtonStyle}
+            onPress={() => {
+              backToPrevious();
+            }}
+          >
+            {backIcon?.(step) ?? <ArrowBack color='#5E0CBC' />}
+          </TouchableOpacity>
+        )}
+        <View style={innerStyles.spacer} />
+        {step === TransferStep.status && status === TransferStatus.success && (
+          <TouchableOpacity onPress={onShare} activeOpacity={0.8} style={styles.rightButtonStyle}>
+            <Text style={styles.rightButtonTitleStyle}>
+              {i18n?.t('transfer_status_component.btn_share') ?? 'Share'}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </SafeAreaView>
       {headerInformation && (
         <>
           <Text style={styles.headerTitleStyle}>{headerInformation.title}</Text>
-          <Text style={styles.headerSubTitleStyle}>{headerInformation.subTitle}</Text>
+          {headerInformation.subTitle && (
+            <Text style={styles.headerSubTitleStyle}>{headerInformation.subTitle}</Text>
+          )}
         </>
+      )}
+      {step === TransferStep.inputAmount && (
+        <InputAmountComponent
+          recipient={recipient}
+          transferDetails={transferDetails}
+          eBank={eBank}
+          currencyCode={currencyCode}
+          onNext={(amount, charge, note, provider) => {
+            setTransferDetails({
+              ...transferDetails,
+              amount,
+              note,
+              currencyCode,
+              charge,
+              bankName: eBank?.name,
+              provider,
+            });
+            setStep(TransferStep.initial);
+          }}
+        />
       )}
       {step === TransferStep.initial && (
         <InputTransferComponent
           transferDetails={transferDetails}
           recipient={recipient}
-          maxAmount={maxAmount}
           currencyCode={currencyCode}
           onSubmit={(details) => {
             setStep(TransferStep.review);
-            setTransferDetails(details);
+            setTransferDetails({ ...transferDetails, ...details });
           }}
           style={styles.inputTransferComponentStyle}
         />
@@ -178,7 +264,10 @@ const TransferComponent = forwardRef((props: TransferComponentProps, ref) => {
           transferDetails={transferDetails}
           isFromContact={isFromContact ?? false}
           goBack={onDone}
-          onChangedStatus={onChangedStatus}
+          onChangedStatus={(value) => {
+            setStatus(value);
+            onChangedStatus(value);
+          }}
           companyIcon={companyIcon}
           style={styles.transferStatusComponentStyle}
           transactionDateFormat={transactionDateFormat}
@@ -186,6 +275,12 @@ const TransferComponent = forwardRef((props: TransferComponentProps, ref) => {
       )}
     </View>
   );
+});
+
+const innerStyles = StyleSheet.create({
+  spacer: {
+    flex: 1,
+  },
 });
 
 export default TransferComponent;

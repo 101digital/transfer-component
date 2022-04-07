@@ -2,14 +2,7 @@ import { Formik } from 'formik';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { StyleProp, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import {
-  Button,
-  getAmountRawValue,
-  InputField,
-  KeyboardSpace,
-  ThemeContext,
-  useCurrencyOption,
-} from 'react-native-theme-component';
+import { Button, InputField, KeyboardSpace, ThemeContext } from 'react-native-theme-component';
 import { ArrowDownIcon } from '../../../assets/icons';
 import { Recipient, TransferDetails } from '../../../type';
 import SelectPurposeModal, { SelectPurposeModalStyles } from './components/select-purpose-modal';
@@ -20,7 +13,6 @@ export type InputTransferComponentProps = {
   style?: InputTransferComponentStyles;
   transferDetails?: TransferDetails;
   recipient?: Recipient;
-  maxAmount: number;
   currencyCode: string;
   onSubmit: (details: TransferDetails) => void;
 };
@@ -37,20 +29,17 @@ export type InputTransferComponentStyles = {
 const InputTransferComponent = ({
   style,
   recipient,
-  maxAmount,
   onSubmit,
   currencyCode,
   transferDetails,
 }: InputTransferComponentProps) => {
   const styles: InputTransferComponentStyles = useMergeStyles(style);
   const { colors, i18n } = useContext(ThemeContext);
-
   const formikRef: any = useRef(null);
-  const currencyOption = useCurrencyOption(currencyCode, true, true);
   const [openPurposeModal, setOpenPurposeModal] = useState(false);
 
   useEffect(() => {
-    if (recipient && !transferDetails) {
+    if (recipient) {
       formikRef?.current?.setFieldValue('accountNumber', recipient.accountNumber);
       formikRef?.current?.setFieldValue('accountName', recipient.displayName);
       formikRef?.current?.setFieldValue('accountId', recipient.paymentReference);
@@ -58,7 +47,7 @@ const InputTransferComponent = ({
         formikRef?.current?.validateForm();
       }, 0);
     }
-  }, [recipient, transferDetails]);
+  }, [recipient]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -74,21 +63,18 @@ const InputTransferComponent = ({
         initialValues={
           transferDetails
             ? InputPaymentData.initial(
-                transferDetails.accountName,
-                transferDetails.accountNumber,
-                transferDetails.accountId,
-                transferDetails.amount.toFixed(2),
+                transferDetails?.accountName ?? '',
+                transferDetails?.accountNumber ?? '',
+                transferDetails?.accountId ?? '',
                 transferDetails.purpose,
-                transferDetails.note,
                 transferDetails.otherPurpose
               )
             : InputPaymentData.empty()
         }
-        validationSchema={InputPaymentSchema(maxAmount, currencyOption)}
+        validationSchema={InputPaymentSchema()}
         onSubmit={(values) => {
           onSubmit({
             ...values,
-            amount: getAmountRawValue(values.amount, currencyOption),
             purpose: values.purposeTransfer,
             otherPurpose: values.otherPurposeTransfer,
             currencyCode,
@@ -128,18 +114,6 @@ const InputTransferComponent = ({
                   }
                   maxLength={100}
                   editable={recipient === undefined}
-                />
-                <Text style={styles.labelTextStyle}>
-                  {i18n?.t('input_transfer_component.lbl_enter_amount') ?? 'Enter amount'}
-                </Text>
-                <InputField
-                  name={'amount'}
-                  placeholder={
-                    i18n?.t('input_transfer_component.plh_enter_amount') ?? 'Enter amount'
-                  }
-                  maxLength={100}
-                  type={'money'}
-                  options={currencyOption}
                 />
                 <Text style={styles.labelTextStyle}>
                   {i18n?.t('input_transfer_component.lbl_purpose_transfer') ??
@@ -190,25 +164,6 @@ const InputTransferComponent = ({
                     }}
                   />
                 )}
-                <Text style={styles.labelTextStyle}>
-                  {i18n?.t('input_transfer_component.lbl_note') ?? 'Note to recipient (Optional)'}
-                </Text>
-                <InputField
-                  scrollEnabled={false}
-                  name={'note'}
-                  placeholder={i18n?.t('input_transfer_component.plh_note') ?? 'Add note'}
-                  maxLength={100}
-                  multiline
-                  numberOfLines={3}
-                  style={{
-                    inputContainerStyle: {
-                      height: 102,
-                      alignItems: 'flex-start',
-                      paddingHorizontal: 0,
-                      paddingVertical: 10,
-                    },
-                  }}
-                />
               </KeyboardAwareScrollView>
               <KeyboardSpace style={styles.footerContainerStyle}>
                 <Button

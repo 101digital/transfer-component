@@ -47,7 +47,7 @@ const SelectUDAccountComponent = ({
 }: SelectUDAccountComponentProps) => {
   const styles: SelectUDAccountComponentStyles = useMergeStyles(style);
   const { contacts, getContacts, isLoadingContacts } = useContext(TransferContext);
-  const { i18n } = useContext(ThemeContext);
+  const { i18n, colors } = useContext(ThemeContext);
 
   useEffect(() => {
     getContacts();
@@ -82,7 +82,9 @@ const SelectUDAccountComponent = ({
             {i18n?.t('select_ud_account_component.btn_view_all') ?? 'View all'}
           </Text>
         </View>
-        {isLoadingContacts && <ActivityIndicator style={styles.loadingContainerStyle} />}
+        {isLoadingContacts && (
+          <ActivityIndicator color={colors.primaryColor} style={styles.loadingContainerStyle} />
+        )}
         <FlatList
           keyExtractor={(item) => item.userId}
           data={contacts}
