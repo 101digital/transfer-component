@@ -24,6 +24,22 @@
   "dependencies": [],
   "templates": [
     {
+      "id": "send-money-ud-ud-template",
+      "templateName": "Button to send Money from UD to UD",
+      "componentName": "SendMoneyFromUDToUD",
+      "imports": [],
+      "headers": [],
+      "renders": [
+        "      <Button label='Send Money' style={{ primaryContainerStyle: { margin: 20 } }} onPress={() => { $fn-send-money }} />"
+      ],
+      "functions": [
+        {
+          "id": "fn-send-money",
+          "params": []
+        }
+      ]
+    },
+    {
       "id": "select-ud-account-component-template",
       "templateName": "Select UD account component template",
       "componentName": "SelectUDAccountComponent",
