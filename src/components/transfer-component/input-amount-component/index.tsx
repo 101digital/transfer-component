@@ -14,9 +14,11 @@ import {
   useCurrencyOption,
 } from 'react-native-theme-component';
 import { InputAmountData, InputAmountSchema } from './model';
-import ReceiverComponent from './components/receiver-component';
+import ReceiverComponent, { ReceiverComponentStyles } from './components/receiver-component';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import SelectMethodComponent from './components/select-method-component';
+import SelectMethodComponent, {
+  SelectMethodComponentStyles,
+} from './components/select-method-component';
 
 export type InputAmountComponentProps = {
   recipient?: Recipient;
@@ -32,6 +34,8 @@ export type InputAmountComponentStyles = {
   contentContainerStyle?: StyleProp<ViewStyle>;
   labelTextStyle?: StyleProp<TextStyle>;
   footerContainerStyle?: StyleProp<ViewStyle>;
+  selectMethodComponentStyle?: SelectMethodComponentStyles;
+  receiverComponentStyle?: ReceiverComponentStyles;
 };
 
 const InputAmountComponent = ({
@@ -74,6 +78,7 @@ const InputAmountComponent = ({
       <ReceiverComponent
         name={recipient?.displayName ?? eBank?.name ?? ''}
         accountNumber={recipient?.accountNumber}
+        style={styles.receiverComponentStyle}
       />
       <Formik
         innerRef={formikRef}
@@ -156,6 +161,7 @@ const InputAmountComponent = ({
                       setCharge(_charge);
                       setProvider(_provider);
                     }}
+                    style={styles.selectMethodComponentStyle}
                   />
                 )}
               </KeyboardAwareScrollView>

@@ -32,6 +32,7 @@ export type SelectMethodComponentStyles = {
   itemFeeStyle?: StyleProp<TextStyle>;
   radioContainerStyle?: StyleProp<ViewStyle>;
   radioInnerContainerStyle?: StyleProp<ViewStyle>;
+  itemSeparatorStyle?: StyleProp<ViewStyle>;
 };
 
 const SelectMethodComponent = ({
@@ -61,7 +62,7 @@ const SelectMethodComponent = ({
       <FlatList
         keyExtractor={(item) => item.name}
         data={eBank.paymentProviders}
-        ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+        ItemSeparatorComponent={() => <View style={styles.itemSeparatorStyle} />}
         renderItem={({ item }) => {
           const _charge = paymentMethod?.Charges.find((c) => c.Provider === item.name);
           const _opacity = item.isActive ? 1 : 0.5;

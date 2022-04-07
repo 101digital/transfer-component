@@ -51,6 +51,9 @@ const useMergeStyles = (style?: SelectMethodComponentStyles): SelectMethodCompon
       borderRadius: 8,
       backgroundColor: '#14BDEB',
     },
+    itemSeparatorStyle: {
+      height: 20,
+    },
   });
 
   return defaultsDeep(style, defaultStyles);

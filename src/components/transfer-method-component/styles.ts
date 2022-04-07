@@ -78,6 +78,9 @@ const useMergeStyles = (style?: TransferMethodComponentStyles): TransferMethodCo
       fontSize: 12,
       color: '#BAB7BB',
     },
+    itemSeparatorStyle: {
+      height: 16,
+    },
   });
 
   return defaultsDeep(style, defaultStyles);

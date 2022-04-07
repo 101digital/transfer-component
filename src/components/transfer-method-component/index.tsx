@@ -31,6 +31,7 @@ export type TransferMethodComponentStyles = {
   buttonLabelStyle?: StyleProp<TextStyle>;
   disableButtonLabelStyle?: StyleProp<TextStyle>;
   disabledTextStyle?: StyleProp<TextStyle>;
+  itemSeparatorStyle?: StyleProp<ViewStyle>;
 };
 
 const TransferMethodComponent = ({
@@ -63,7 +64,7 @@ const TransferMethodComponent = ({
           <FlatList
             keyExtractor={(item) => item.LocalInstrument}
             data={paymentMethods}
-            ItemSeparatorComponent={() => <View style={{ height: 16 }} />}
+            ItemSeparatorComponent={() => <View style={styles.itemSeparatorStyle} />}
             renderItem={({ item }) => (
               <>
                 <TouchableOpacity

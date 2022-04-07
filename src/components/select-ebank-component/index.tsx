@@ -112,12 +112,12 @@ const SelectEBankComponent = ({ style, onNext }: SelectEBankComponentProps) => {
             return (
               <>
                 <Text style={styles.sectionTextStyle}>{item.section}</Text>
-                {item.items.map((item: EBank) => (
+                {item.items.map((ebank: EBank) => (
                   <ItemEBankComponent
-                    key={item.id}
-                    eBank={item}
+                    key={ebank.id}
+                    eBank={ebank}
                     onPressed={() => {
-                      onNext(item);
+                      onNext(ebank);
                     }}
                   />
                 ))}

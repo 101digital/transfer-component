@@ -23,7 +23,7 @@ import { EBank, Recipient, TransferDetails, TransferStatus } from '../../type';
 import AuthorizeTransferComponent, {
   AuthorizeTransferComponentStyles,
 } from './authorize-transfer-component';
-import InputAmountComponent from './input-amount-component';
+import InputAmountComponent, { InputAmountComponentStyles } from './input-amount-component';
 import InputTransferComponent, { InputTransferComponentStyles } from './input-transfer-component';
 import ReviewTransferComponent, {
   ReviewTransferComponentStyles,
@@ -62,6 +62,7 @@ export type TransferComponentStyles = {
   reviewTransferComponentStyle?: ReviewTransferComponentStyles;
   authorizeTransferComponentStyle?: AuthorizeTransferComponentStyles;
   transferStatusComponentStyle?: TransferStatusComponentStyles;
+  inputAmountComponentStyle?: InputAmountComponentStyles;
 };
 
 export enum TransferStep {
@@ -235,6 +236,7 @@ const TransferComponent = forwardRef((props: TransferComponentProps, ref) => {
             });
             setStep(TransferStep.initial);
           }}
+          style={styles.inputAmountComponentStyle}
         />
       )}
       {step === TransferStep.initial && (
