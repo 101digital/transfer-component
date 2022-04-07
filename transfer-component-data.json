@@ -9,15 +9,27 @@
     "env": {
       "development": {
         "paymentBaseUrl": "https://api-ud-ow-dev.101digital.io/payment-service/1.0.0",
-        "contactBaseUrl": "https://api-ud-ow-dev.101digital.io/contact-service/1.0.0"
+        "contactBaseUrl": "https://api-ud-ow-dev.101digital.io/contact-service/1.0.0",
+        "bankInformationBaseUrl": "https://api-ud-ow-dev.101digital.io/bank-information-service/1.0.0",
+        "udScheme": "PH.PlatformDefined.Id",
+        "pesonetScheme": "PH.BRSTN.AccountNumer",
+        "instapayScheme": ""
       },
       "staging": {
         "paymentBaseUrl": "https://api-ud-ow-dev.101digital.io/payment-service/1.0.0",
-        "contactBaseUrl": "https://api-ud-ow-dev.101digital.io/contact-service/1.0.0"
+        "contactBaseUrl": "https://api-ud-ow-dev.101digital.io/contact-service/1.0.0",
+        "bankInformationBaseUrl": "https://api-ud-ow-dev.101digital.io/bank-information-service/1.0.0",
+        "udScheme": "PH.PlatformDefined.Id",
+        "pesonetScheme": "PH.BRSTN.AccountNumer",
+        "instapayScheme": ""
       },
       "production": {
         "paymentBaseUrl": "https://api-ud-ow-dev.101digital.io/payment-service/1.0.0",
-        "contactBaseUrl": "https://api-ud-ow-dev.101digital.io/contact-service/1.0.0"
+        "contactBaseUrl": "https://api-ud-ow-dev.101digital.io/contact-service/1.0.0",
+        "bankInformationBaseUrl": "https://api-ud-ow-dev.101digital.io/bank-information-service/1.0.0",
+        "udScheme": "PH.PlatformDefined.Id",
+        "pesonetScheme": "PH.BRSTN.AccountNumer",
+        "instapayScheme": ""
       }
     }
   },
