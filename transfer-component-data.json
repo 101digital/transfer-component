@@ -39,8 +39,15 @@
       "id": "send-money-ud-ud-template",
       "templateName": "Button to send Money from UD to UD",
       "componentName": "SendMoneyFromUDToUD",
-      "imports": [],
-      "headers": [],
+      "imports": ["import { WalletContext } from '@banking-component/wallet-component';"],
+      "headers": [
+        "  const { fetchWallets } = useContext(WalletContext);",
+        "",
+        "  useEffect(() => {",
+        "    fetchWallets();",
+        "  }, []);",
+        ""
+      ],
       "renders": [
         "      <Button label='Send Money' style={{ primaryContainerStyle: { margin: 20 } }} onPress={() => { $fn-send-money }} />"
       ],
@@ -162,7 +169,6 @@
         "        onDone={() => navigation.popToTop()}",
         "        onChangedStep={setStep}",
         "        onChangedStatus={setStatus}",
-        "        companyIcon={<Image source={images.raiffeisen} style={styles.unionImageStyle} />}",
         "        onCancel={() => navigation.goBack()}",
         "      />"
       ],
