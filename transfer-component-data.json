@@ -90,21 +90,17 @@
       "templateName": "New recipient component template",
       "componentName": "NewRecipientComponent",
       "imports": [
-        "import { NewRecipientComponent, TransferContext } from 'transfer-component';",
+        "import { NewRecipientComponent } from 'transfer-component';",
         "import { AuthContext } from 'react-native-auth-component';"
       ],
-      "headers": [
-        "  const { errorSearchRecipient, clearErrors } = useContext(TransferContext);",
-        "  const { profile } = useContext(AuthContext);"
-      ],
+      "headers": ["  const { profile } = useContext(AuthContext);"],
       "renders": [
         "        <NewRecipientComponent",
         "          userId={profile?.userId!}",
         "          onNext={(recipient) => {",
         "            $fn-on-next",
         "          }}",
-        "        />",
-        "        <ErrorModal isShowClose={false} error={getErrorDetails(errorSearchRecipient?.error)} onClose={clearErrors} />"
+        "        />"
       ],
       "functions": [
         {
@@ -139,7 +135,7 @@
         "  const { getDefaultWallet } = useContext(WalletContext);",
         "  const [step, setStep] = useState<TransferStep>(TransferStep.initial);",
         "  const [status, setStatus] = useState<TransferStatus>(TransferStatus.progressing);",
-        "  const userAccId = getDefaultWallet()?.bankAccount.accountId;",
+        "  const wallet = getDefaultWallet();",
         "  const transferComponentRef = useRef<TransferComponentRef>();",
         "",
         "  useEffect(() => {",
@@ -150,13 +146,9 @@
         "  }, [navigation, status, step]);",
         "",
         "  const handleBackButton = (e: any) => {",
-        "    if (",
-        "      step === TransferStep.inputAmount ||",
-        "      (step === TransferStep.status && status !== TransferStatus.progressing)",
-        "    ) {",
-        "      return;",
+        "    if (step === TransferStep.status && status === TransferStatus.progressing) {",
+        "      e.preventDefault();",
         "    }",
-        "    e.preventDefault();",
         "  };",
         ""
       ],
@@ -166,13 +158,12 @@
         "        recipient={recipient}",
         "        eBank={eBank}",
         "        isFromContact={isFromContact}",
-        "        userAccountId={userAccId ?? ''}",
-        "        onDone={() => $fn-on-done }",
+        "        wallet={wallet}",
+        "        onDone={() => navigation.popToTop()}",
         "        onChangedStep={setStep}",
         "        onChangedStatus={setStatus}",
-        "        currencyCode={'PHP'}",
         "        companyIcon={<Image source={images.raiffeisen} style={styles.unionImageStyle} />}",
-        "        onCancel={() => $fn-on-cancel }",
+        "        onCancel={() => navigation.goBack()}",
         "      />"
       ],
       "functions": [
@@ -189,11 +180,11 @@
     {
       "id": "choose-transfer-method-component-template",
       "templateName": "Choose transfer method component template",
-      "componentName": "ChooseTransferMethodComponent",
-      "imports": ["import { ChooseTransferMethodComponent } from 'transfer-component';"],
+      "componentName": "TransferMethodComponent",
+      "imports": ["import { TransferMethodComponent } from 'transfer-component';"],
       "headers": [],
       "renders": [
-        "      <ChooseTransferMethodComponent",
+        "      <TransferMethodComponent",
         "        onPressed={(method) => {",
         "          if (method.LocalInstrument === 'UD_TO_UD') {",
         "            $fn-ud-transfer",
