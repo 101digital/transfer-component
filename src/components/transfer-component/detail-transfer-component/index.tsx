@@ -73,7 +73,7 @@ const DetailsTransferComponent = ({ style, details }: DetailsTransferComponentPr
         {useCurrencyFormat(details.amount ?? 0, details.currencyCode ?? 'USD')}
       </Text>
       <Text style={styles.labelTextStyle}>
-        {i18n?.t('detail_transfer_component.lbl_free') ?? 'Transaction Fee'}
+        {i18n?.t('detail_transfer_component.lbl_transaction_fee') ?? 'Transaction Fee'}
       </Text>
       <Text style={styles.valueTextStyle}>
         {details.charge?.Fee === 0

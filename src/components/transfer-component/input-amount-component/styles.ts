@@ -14,6 +14,7 @@ const useMergeStyles = (style?: InputAmountComponentStyles): InputAmountComponen
     },
     contentContainerStyle: {
       marginHorizontal: 24,
+      marginBottom: 96,
     },
     labelTextStyle: {
       fontSize: 12,
