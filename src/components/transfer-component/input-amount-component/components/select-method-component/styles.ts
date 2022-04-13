@@ -12,9 +12,9 @@ const useMergeStyles = (style?: SelectMethodComponentStyles): SelectMethodCompon
       fontSize: 12,
       lineHeight: 21,
       fontFamily: fonts.medium,
-      color: colors.primaryTextColor,
+      color: '#ffffff',
       marginBottom: 14,
-      marginTop: 20,
+      marginTop: 37,
     },
     itemContainerStyle: {
       backgroundColor: '#ffffff',

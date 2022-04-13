@@ -36,11 +36,13 @@ export interface TransferContextData {
   contacts: Recipient[];
   isLoadingContacts: boolean;
   getContacts: () => void;
+  errorLoadContacts?: Error;
   isAddingContact: boolean;
   addContact: (accountId: string, accountNumber: string, displayName: string) => void;
   isAddedContact: boolean;
   errorAddContact?: Error;
   getPaymentMethod: () => void;
+  errorGetPaymentMethod?: Error;
   isLoadingPaymentMethod: boolean;
   paymentMethods: PaymentMethod[];
   setPaymentMethod: (method: PaymentMethod) => void;
@@ -48,6 +50,7 @@ export interface TransferContextData {
   eBanks: EBank[];
   isLoadingBank: boolean;
   getEBanks: () => void;
+  errorGetEBanks?: Error;
 }
 
 export const transferDefaultValue: TransferContextData = {
@@ -101,6 +104,7 @@ export function useTransferContextValue(): TransferContextData {
 
   const [_isLoadingContacts, setLoadingContacts] = useState(false);
   const [_contacts, setContacts] = useState<Recipient[]>([]);
+  const [_errorLoadContact, setErrorLoadContact] = useState<Error | undefined>(undefined);
 
   const [_isAddingContact, setAddingContact] = useState(false);
   const [_errorAddContact, setErrorAddContact] = useState<Error | undefined>(undefined);
@@ -109,9 +113,11 @@ export function useTransferContextValue(): TransferContextData {
   const [_isLoadingPaymentMethod, setLoadingPaymentMethods] = useState(false);
   const [_paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
   const [_paymentMethod, _setPaymentMethod] = useState<PaymentMethod | undefined>(undefined);
+  const [_errorGetPaymentMethod, setErrorGetPaymentMethod] = useState<Error | undefined>(undefined);
 
   const [_isLoadingEBank, setLoadingEBank] = useState(false);
   const [_eBanks, setEBanks] = useState<EBank[]>([]);
+  const [_errorGetEBank, setErrorGetEBank] = useState<Error | undefined>(undefined);
 
   const addContact = useCallback(
     async (accountId: string, accountNumber: string, displayName: string) => {
@@ -137,8 +143,10 @@ export function useTransferContextValue(): TransferContextData {
       const { data } = await transferService.getRecentContacts();
       setContacts(data);
       setLoadingContacts(false);
+      // clearErrors();
     } catch (error) {
       setLoadingContacts(false);
+      setErrorLoadContact(error as Error);
     }
   }, []);
 
@@ -216,12 +224,24 @@ export function useTransferContextValue(): TransferContextData {
     if (_errorAddContact) {
       setErrorAddContact(undefined);
     }
+    if (_errorLoadContact) {
+      setErrorLoadContact(undefined);
+    }
+    if (_errorGetPaymentMethod) {
+      setErrorGetPaymentMethod(undefined);
+    }
+    if (_errorGetEBank) {
+      setErrorGetEBank(undefined);
+    }
   }, [
     _errorInitialTransfer,
     _errorAuthorizeTransfer,
     _errorResendOtp,
     _errorSearchRecipient,
     _errorAddContact,
+    _errorLoadContact,
+    _errorGetPaymentMethod,
+    _errorGetEBank,
   ]);
 
   const clearTransferResponse = useCallback(() => {
@@ -323,8 +343,10 @@ export function useTransferContextValue(): TransferContextData {
       const { Data } = await transferService.getPaymentMethod();
       setPaymentMethods(Data);
       setLoadingPaymentMethods(false);
+      // clearErrors();
     } catch (error) {
       setLoadingPaymentMethods(false);
+      setErrorGetPaymentMethod(error as Error);
     }
   }, []);
 
@@ -338,8 +360,10 @@ export function useTransferContextValue(): TransferContextData {
       const { data } = await transferService.getEBanks();
       setEBanks(data);
       setLoadingEBank(false);
+      // clearErrors();
     } catch (error) {
       setLoadingEBank(false);
+      setErrorGetEBank(error as Error);
     }
   }, []);
 
@@ -378,8 +402,14 @@ export function useTransferContextValue(): TransferContextData {
       getEBanks,
       eBanks: _eBanks,
       isLoadingBank: _isLoadingEBank,
+      errorLoadContacts: _errorLoadContact,
+      errorGetPaymentMethod: _errorGetPaymentMethod,
+      errorGetEBanks: _errorGetEBank,
     }),
     [
+      _errorGetEBank,
+      _errorGetPaymentMethod,
+      _errorLoadContact,
       _isLoadingEBank,
       _eBanks,
       _paymentMethod,

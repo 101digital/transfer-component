@@ -17,6 +17,7 @@ export interface TransferDetails {
   charge?: PaymentCharge;
   bankName?: string;
   provider?: PaymentProvider;
+  transferType?: 'UD' | 'OTHERS';
 }
 
 export interface TransferResponse {
@@ -67,4 +68,51 @@ export interface PaymentProvider {
 export type GroupEBank = {
   section: string;
   items: EBank[];
+};
+
+export type GroupContacts = {
+  section: string;
+  items: Recipient[];
+};
+
+export type Wallet = {
+  walletId: string;
+  walletName: string;
+  currentBalance: number;
+  availableBalance: number;
+  currencyCode: string;
+  isDefaultWallet: boolean;
+  bankAccount: {
+    bankCode: string;
+    accountNumber: string;
+    accountId: string;
+  };
+};
+export interface PhoneNumber {
+  label: string;
+  number: string;
+}
+
+export interface DeviceContact {
+  recordID: string;
+  backTitle: string;
+  company: string | null;
+  displayName: string;
+  familyName: string;
+  givenName: string;
+  middleName: string;
+  jobTitle: string;
+  phoneNumbers: PhoneNumber[];
+  hasThumbnail: boolean;
+  thumbnailPath: string;
+  prefix: string;
+  suffix: string;
+  department: string;
+  note: string;
+  fullName: string;
+}
+
+export type GroupDeviceContact = {
+  section: string;
+  items: DeviceContact[];
 };

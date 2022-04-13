@@ -12,14 +12,15 @@ const useMergeStyles = (style?: TransferSuccessComponentStyles): TransferSuccess
       backgroundColor: colors.appBarBackgroundColor,
     },
     mainContainerStyle: {
-      flex: 1,
       paddingHorizontal: 24,
+      backgroundColor: colors.appBarBackgroundColor,
     },
     headerTextStyle: {
       fontFamily: fonts.bold,
       fontSize: 24,
       lineHeight: 36,
       color: '#2E7D32',
+      marginTop: 10,
     },
     subHeaderTextStyle: {
       fontFamily: fonts.medium,

@@ -12,6 +12,8 @@ export type ReviewTransferComponentProps = {
   style?: ReviewTransferComponentStyles;
   userAccountId: string;
   transferDetail: TransferDetails;
+  onEditAmount: () => void;
+  onEditReceiver: () => void;
 };
 
 export type ReviewTransferComponentStyles = {
@@ -25,6 +27,8 @@ const ReviewTransferComponent = ({
   style,
   transferDetail,
   userAccountId,
+  onEditAmount,
+  onEditReceiver,
 }: ReviewTransferComponentProps) => {
   const styles: ReviewTransferComponentStyles = useMergeStyles(style);
   const {
@@ -37,6 +41,7 @@ const ReviewTransferComponent = ({
     provider,
     otherPurpose,
     accountNumber,
+    transferType,
   } = transferDetail;
   const { isInitialingTransfer, initTransfer } = useContext(TransferContext);
   const { i18n } = useContext(ThemeContext);
@@ -48,6 +53,8 @@ const ReviewTransferComponent = ({
           <DetailsTransferComponent
             details={transferDetail}
             style={styles.detailTransferComponentStyle}
+            onEditReceiver={onEditReceiver}
+            onEditAmount={onEditAmount}
           />
         </ScrollView>
         <View style={styles.footerContainerStyle}>
@@ -57,7 +64,7 @@ const ReviewTransferComponent = ({
             }
             isLoading={isInitialingTransfer}
             onPress={() => {
-              const creaditorAccId = provider ? accountNumber : accountId;
+              const creaditorAccId = transferType === 'OTHERS' ? accountNumber : accountId;
               if (creaditorAccId && accountName && amount && currencyCode) {
                 initTransfer(
                   amount,

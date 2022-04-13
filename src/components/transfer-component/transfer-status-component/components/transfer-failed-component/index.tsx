@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { SafeAreaView, StyleProp, Text, TextStyle, View, ViewStyle } from 'react-native';
 import { Button, ThemeContext } from 'react-native-theme-component';
-import { InfomationIcon } from '../../../../../assets/icons';
+import { InformationIcon } from '../../../../../assets/icons';
 import useMergeStyles from './styles';
 
 export type TransferFailedComponentProps = {
@@ -25,7 +25,7 @@ const TransferFailedComponent = ({ style, onBack }: TransferFailedComponentProps
   return (
     <SafeAreaView style={styles.containerStyle}>
       <View style={styles.mainContainerStyle}>
-        <InfomationIcon size={80} />
+        <InformationIcon size={80} />
         <Text style={styles.titleTextStyle}>
           {i18n?.t('transfer_status_component.lbl_transfer_unsuccessful') ??
             'Transfer Request\nUnsuccessful!'}

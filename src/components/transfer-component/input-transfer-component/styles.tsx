@@ -1,7 +1,7 @@
 import { defaultsDeep } from 'lodash';
 import { useContext } from 'react';
 import { StyleSheet } from 'react-native';
-import { ThemeContext } from 'react-native-theme-component';
+import { addAlpha, ThemeContext } from 'react-native-theme-component';
 import { InputTransferComponentStyles } from '.';
 
 const useMergeStyles = (style?: InputTransferComponentStyles): InputTransferComponentStyles => {
@@ -13,7 +13,7 @@ const useMergeStyles = (style?: InputTransferComponentStyles): InputTransferComp
     },
     footerContainerStyle: {
       padding: 24,
-      backgroundColor: 'rgba(246, 250, 255, 0.8)',
+      backgroundColor: addAlpha(colors.appBarBackgroundColor!, 0.8),
     },
     contentContainerStyle: {
       flex: 1,
@@ -30,6 +30,14 @@ const useMergeStyles = (style?: InputTransferComponentStyles): InputTransferComp
     },
     suffixContainerStyle: {
       paddingHorizontal: 12,
+    },
+    countLengthStyle: {
+      fontFamily: fonts.medium,
+      fontSize: 12,
+      lineHeight: 21,
+      color: '#000000',
+      marginTop: 8,
+      textAlign: 'right',
     },
   });
 

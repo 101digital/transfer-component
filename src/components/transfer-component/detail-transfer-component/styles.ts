@@ -29,6 +29,18 @@ const useMergeStyles = (style?: DetailsTransferComponentStyles): DetailsTransfer
       lineHeight: 24,
       color: colors.primaryTextColor,
     },
+    editReceiverButtonStyle: {
+      position: 'absolute',
+      right: -10,
+      padding: 10,
+      top: 5,
+    },
+    editAmountButtonStyle: {
+      position: 'absolute',
+      right: -10,
+      padding: 10,
+      top: 5,
+    },
   });
   return defaultsDeep(style, defaultStyles);
 };

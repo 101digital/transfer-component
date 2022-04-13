@@ -2,7 +2,6 @@ import { Recipient, EBank, PaymentCharge, PaymentProvider, TransferDetails } fro
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { StyleProp, Text, TextStyle, View, ViewStyle } from 'react-native';
 import useMergeStyles from './styles';
-import { TransferContext } from '../../../context/transfer-context';
 import { Formik } from 'formik';
 import {
   Button,
@@ -23,10 +22,12 @@ import SelectMethodComponent, {
 export type InputAmountComponentProps = {
   recipient?: Recipient;
   eBank?: EBank;
+  availableBalance: number;
   style?: InputAmountComponentStyles;
   currencyCode: string;
   transferDetails?: TransferDetails;
   onNext: (amount: number, charge: PaymentCharge, note: string, provider?: PaymentProvider) => void;
+  onEdit: () => void;
 };
 
 export type InputAmountComponentStyles = {
@@ -36,6 +37,7 @@ export type InputAmountComponentStyles = {
   footerContainerStyle?: StyleProp<ViewStyle>;
   selectMethodComponentStyle?: SelectMethodComponentStyles;
   receiverComponentStyle?: ReceiverComponentStyles;
+  countLengthStyle?: StyleProp<TextStyle>;
 };
 
 const InputAmountComponent = ({
@@ -45,20 +47,15 @@ const InputAmountComponent = ({
   currencyCode,
   onNext,
   transferDetails,
+  onEdit,
+  availableBalance,
 }: InputAmountComponentProps) => {
   const styles: InputAmountComponentStyles = useMergeStyles(style);
-  const { paymentMethod } = useContext(TransferContext);
   const formikRef: any = useRef(null);
   const currencyOption = useCurrencyOption(currencyCode, true, true);
-  const { i18n, colors } = useContext(ThemeContext);
+  const { i18n } = useContext(ThemeContext);
   const [charge, setCharge] = useState<PaymentCharge | undefined>(undefined);
   const [provider, setProvider] = useState<PaymentProvider | undefined>(undefined);
-
-  useEffect(() => {
-    if (recipient) {
-      setCharge(paymentMethod?.Charges[0]);
-    }
-  }, [recipient, eBank]);
 
   useEffect(() => {
     if (transferDetails) {
@@ -75,11 +72,6 @@ const InputAmountComponent = ({
 
   return (
     <>
-      <ReceiverComponent
-        name={recipient?.displayName ?? eBank?.name ?? ''}
-        accountNumber={recipient?.accountNumber}
-        style={styles.receiverComponentStyle}
-      />
       <Formik
         innerRef={formikRef}
         enableReinitialize={true}
@@ -93,7 +85,7 @@ const InputAmountComponent = ({
         }
         validationSchema={InputAmountSchema(
           parseFloat(charge?.Min.toFixed(2) ?? '0.00'),
-          parseFloat(charge?.Max.toFixed(2) ?? '1000000000000.00'),
+          Math.min(parseFloat(charge?.Max.toFixed(2) ?? '1000000000000.00'), availableBalance),
           currencyOption,
           currencyCode
         )}
@@ -106,16 +98,22 @@ const InputAmountComponent = ({
           );
         }}
       >
-        {({ isValid, submitForm }) => {
+        {({ isValid, submitForm, values }) => {
           return (
             <View style={styles.containerStyle}>
               <KeyboardAwareScrollView
-                keyboardShouldPersistTaps='handled'
+                keyboardShouldPersistTaps="handled"
                 style={styles.contentContainerStyle}
                 keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
                 showsVerticalScrollIndicator={false}
                 extraScrollHeight={60}
               >
+                <ReceiverComponent
+                  onEdit={onEdit}
+                  name={recipient?.displayName ?? eBank?.name ?? ''}
+                  accountNumber={recipient?.accountNumber}
+                  style={styles.receiverComponentStyle}
+                />
                 <Text style={styles.labelTextStyle}>
                   {(
                     i18n?.t('input_amount_component.lbl_enter_amount') ??
@@ -132,25 +130,32 @@ const InputAmountComponent = ({
                   type={'money'}
                   options={currencyOption}
                 />
-                <Text style={styles.labelTextStyle}>
-                  {i18n?.t('input_amount_component.lbl_note') ?? 'Note to recipient (Optional)'}
-                </Text>
-                <InputField
-                  scrollEnabled={false}
-                  name={'note'}
-                  placeholder={i18n?.t('input_amount_component.plh_note') ?? 'Add note'}
-                  maxLength={100}
-                  multiline
-                  numberOfLines={3}
-                  style={{
-                    inputContainerStyle: {
-                      height: 102,
-                      alignItems: 'flex-start',
-                      paddingHorizontal: 0,
-                      paddingVertical: 10,
-                    },
-                  }}
-                />
+                {transferDetails?.transferType === 'UD' && (
+                  <>
+                    <Text style={styles.labelTextStyle}>
+                      {i18n?.t('input_amount_component.lbl_note') ?? 'Note to recipient (Optional)'}
+                    </Text>
+                    <InputField
+                      scrollEnabled={false}
+                      name={'note'}
+                      placeholder={i18n?.t('input_amount_component.plh_note') ?? 'Add note'}
+                      maxLength={100}
+                      multiline
+                      numberOfLines={3}
+                      style={{
+                        inputContainerStyle: {
+                          height: 102,
+                          alignItems: 'flex-start',
+                          paddingHorizontal: 0,
+                          paddingVertical: 10,
+                        },
+                      }}
+                    />
+                    <Text style={styles.countLengthStyle}>{`${
+                      values.note?.length ?? 0
+                    } / 100`}</Text>
+                  </>
+                )}
                 {eBank && (
                   <SelectMethodComponent
                     eBank={eBank}
@@ -170,7 +175,6 @@ const InputAmountComponent = ({
                   onPress={submitForm}
                   label={i18n?.t('input_amount_component.btn_proceed') ?? 'Proceed'}
                   disabled={!isValid || !charge}
-                  disableColor={colors.secondaryButtonColor}
                 />
               </KeyboardSpace>
             </View>

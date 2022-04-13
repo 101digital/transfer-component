@@ -42,6 +42,22 @@ const useMergeStyles = (style?: ContactItemComponentStyles): ContactItemComponen
       lineHeight: 24,
       color: '#000',
     },
+    radioContainerStyle: {
+      width: 26,
+      height: 26,
+      borderRadius: 13,
+      borderWidth: 1,
+      borderColor: '#14BDEB',
+      alignItems: 'center',
+      justifyContent: 'center',
+      backgroundColor: '#ffffff',
+    },
+    radioInnerContainerStyle: {
+      width: 16,
+      height: 16,
+      borderRadius: 8,
+      backgroundColor: '#14BDEB',
+    },
   });
 
   return defaultsDeep(style, defaultStyles);

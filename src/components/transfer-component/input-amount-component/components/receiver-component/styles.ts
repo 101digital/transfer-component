@@ -12,16 +12,27 @@ const useMergeStyles = (style?: ReceiverComponentStyles): ReceiverComponentStyle
       height: 110,
       backgroundColor: '#8E55D0',
       borderRadius: 8,
-      marginHorizontal: 24,
       marginTop: 4,
       paddingVertical: 18,
       paddingHorizontal: 20,
     },
-    labelStyle: {
+    labelContainerStyle: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+    },
+    leftLabelStyle: {
       fontFamily: fonts.medium,
       fontSize: 12,
       lineHeight: 21,
       color: '#ffffff',
+    },
+    rightLabelStyle: {
+      fontFamily: fonts.bold,
+      fontSize: 14,
+      lineHeight: 16,
+      color: '#ffffff',
+      textDecorationLine: 'underline',
     },
     contentContainerStyle: {
       flexDirection: 'row',

@@ -63,6 +63,15 @@ const useMergeStyles = (style?: NewRecipientComponentStyles): NewRecipientCompon
       padding: 24,
       backgroundColor: 'rgba(246, 250, 255, 0.8)',
     },
+    selectDeviceContactStyle: {
+      fontFamily: fonts.bold,
+      fontSize: 14,
+      lineHeight: 21,
+      color: colors.primaryButtonColor,
+      textDecorationLine: 'underline',
+      textAlign: 'center',
+      paddingVertical: 20,
+    },
   });
 
   return defaultsDeep(style, defaultStyles);

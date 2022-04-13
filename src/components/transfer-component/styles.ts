@@ -44,6 +44,22 @@ const useMergeStyles = (style?: TransferComponentStyles): TransferComponentStyle
       textDecorationLine: 'underline',
       color: '#FF9800',
     },
+    balanceTitleStyle: {
+      fontFamily: fonts.medium,
+      fontSize: 10,
+      lineHeight: 18,
+      color: '#ffffff',
+      textAlign: 'right',
+      marginHorizontal: 24,
+    },
+    balanceValueStyle: {
+      fontFamily: fonts.medium,
+      fontSize: 12,
+      lineHeight: 21,
+      color: '#ffffff',
+      textAlign: 'right',
+      marginHorizontal: 24,
+    },
   });
 
   return defaultsDeep(style, defaultStyles);

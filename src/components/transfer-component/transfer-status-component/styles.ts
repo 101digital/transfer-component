@@ -6,6 +6,7 @@ const useMergeStyles = (style?: TransferStatusComponentStyles): TransferStatusCo
   const defaultStyles: TransferStatusComponentStyles = StyleSheet.create({
     containerStyle: {
       flex: 1,
+      paddingBottom: 24,
     },
   });
 

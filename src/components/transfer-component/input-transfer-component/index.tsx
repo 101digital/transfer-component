@@ -24,6 +24,7 @@ export type InputTransferComponentStyles = {
   labelTextStyle?: StyleProp<TextStyle>;
   suffixContainerStyle?: StyleProp<ViewStyle>;
   purposeModalComponentStyle?: SelectPurposeModalStyles;
+  countLengthStyle?: StyleProp<TextStyle>;
 };
 
 const InputTransferComponent = ({
@@ -67,7 +68,8 @@ const InputTransferComponent = ({
                 transferDetails?.accountNumber ?? '',
                 transferDetails?.accountId ?? '',
                 transferDetails.purpose,
-                transferDetails.otherPurpose
+                transferDetails.otherPurpose,
+                transferDetails.note
               )
             : InputPaymentData.empty()
         }
@@ -86,7 +88,7 @@ const InputTransferComponent = ({
           return (
             <View style={styles.containerStyle}>
               <KeyboardAwareScrollView
-                keyboardShouldPersistTaps='handled'
+                keyboardShouldPersistTaps="handled"
                 style={styles.contentContainerStyle}
                 keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
                 showsVerticalScrollIndicator={false}
@@ -101,7 +103,7 @@ const InputTransferComponent = ({
                     i18n?.t('input_transfer_component.plh_account_number') ?? 'Enter account number'
                   }
                   maxLength={100}
-                  keyboardType='number-pad'
+                  keyboardType="number-pad"
                   editable={recipient === undefined}
                 />
                 <Text style={styles.labelTextStyle}>
@@ -131,7 +133,7 @@ const InputTransferComponent = ({
                       i18n?.t('input_transfer_component.plh_select_purpose_transfer') ??
                       'Select a purpose'
                     }
-                    pointerEvents='none'
+                    pointerEvents="none"
                     editable={false}
                     suffixIcon={
                       <View style={styles.suffixContainerStyle}>
@@ -141,28 +143,59 @@ const InputTransferComponent = ({
                   />
                 </TouchableOpacity>
                 {_isOther && (
-                  <InputField
-                    scrollEnabled={false}
-                    name={'otherPurposeTransfer'}
-                    placeholder={
-                      i18n?.t('input_transfer_component.plh_enter_purpose_transfer') ??
-                      'Enter purpose of transfer'
-                    }
-                    maxLength={100}
-                    multiline
-                    numberOfLines={3}
-                    style={{
-                      containerStyle: {
-                        marginTop: 8,
-                      },
-                      inputContainerStyle: {
-                        height: 102,
-                        alignItems: 'flex-start',
-                        paddingHorizontal: 0,
-                        paddingVertical: 10,
-                      },
-                    }}
-                  />
+                  <>
+                    <InputField
+                      scrollEnabled={false}
+                      name={'otherPurposeTransfer'}
+                      placeholder={
+                        i18n?.t('input_transfer_component.plh_enter_purpose_transfer') ??
+                        'Enter purpose of transfer'
+                      }
+                      maxLength={100}
+                      multiline
+                      numberOfLines={3}
+                      style={{
+                        containerStyle: {
+                          marginTop: 8,
+                        },
+                        inputContainerStyle: {
+                          height: 102,
+                          alignItems: 'flex-start',
+                          paddingHorizontal: 0,
+                          paddingVertical: 10,
+                        },
+                      }}
+                    />
+                    <Text style={styles.countLengthStyle}>{`${
+                      values.otherPurposeTransfer?.length ?? 0
+                    } / 100`}</Text>
+                  </>
+                )}
+                {transferDetails?.transferType === 'OTHERS' && (
+                  <>
+                    <Text style={styles.labelTextStyle}>
+                      {i18n?.t('input_amount_component.lbl_note') ?? 'Note to recipient (Optional)'}
+                    </Text>
+                    <InputField
+                      scrollEnabled={false}
+                      name={'note'}
+                      placeholder={i18n?.t('input_amount_component.plh_note') ?? 'Add note'}
+                      maxLength={100}
+                      multiline
+                      numberOfLines={3}
+                      style={{
+                        inputContainerStyle: {
+                          height: 102,
+                          alignItems: 'flex-start',
+                          paddingHorizontal: 0,
+                          paddingVertical: 10,
+                        },
+                      }}
+                    />
+                    <Text style={styles.countLengthStyle}>{`${
+                      values.note?.length ?? 0
+                    } / 100`}</Text>
+                  </>
                 )}
               </KeyboardAwareScrollView>
               <KeyboardSpace style={styles.footerContainerStyle}>

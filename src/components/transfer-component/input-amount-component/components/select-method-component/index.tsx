@@ -65,7 +65,7 @@ const SelectMethodComponent = ({
         ItemSeparatorComponent={() => <View style={styles.itemSeparatorStyle} />}
         renderItem={({ item }) => {
           const _charge = paymentMethod?.Charges.find((c) => c.Provider === item.name);
-          const _opacity = item.isActive ? 1 : 0.5;
+          const _opacity = item.isActive ? 1 : 0.2;
           return (
             <TouchableOpacity
               activeOpacity={0.8}

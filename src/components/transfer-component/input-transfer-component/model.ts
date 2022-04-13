@@ -6,7 +6,8 @@ export class InputPaymentData {
     readonly accountName: string,
     readonly accountId: string,
     readonly purposeTransfer: string,
-    readonly otherPurposeTransfer?: string
+    readonly otherPurposeTransfer?: string,
+    readonly note?: string
   ) {}
 
   static empty(): InputPaymentData {
@@ -18,14 +19,16 @@ export class InputPaymentData {
     accountName: string,
     accountId: string,
     purposeTransfer?: string,
-    otherPurposeTransfer?: string
+    otherPurposeTransfer?: string,
+    note?: string
   ): InputPaymentData {
     return new InputPaymentData(
       accountNumber,
       accountName,
       accountId,
       purposeTransfer ?? '',
-      otherPurposeTransfer
+      otherPurposeTransfer,
+      note
     );
   }
 }

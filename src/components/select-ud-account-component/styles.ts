@@ -86,6 +86,14 @@ const useMergeStyles = (style?: SelectUDAccountComponentStyles): SelectUDAccount
     loadingContainerStyle: {
       paddingVertical: 20,
     },
+    emptyContactTextStyle: {
+      fontFamily: fonts.medium,
+      fontSize: 14,
+      lineHeight: 24,
+      color: '#7F7B82',
+      textAlign: 'center',
+      paddingBottom: 39,
+    },
   });
 
   return defaultsDeep(style, defaultStyles);

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleProp, Text, TextStyle, View, ViewStyle } from 'react-native';
+import { StyleProp, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { ThemeContext } from 'react-native-theme-component';
 import useMergeStyles from './styles';
 
@@ -7,11 +7,14 @@ export type ReceiverComponentProps = {
   name: string;
   accountNumber?: string;
   style?: ReceiverComponentStyles;
+  onEdit: () => void;
 };
 
 export type ReceiverComponentStyles = {
   containerStyle?: StyleProp<ViewStyle>;
-  labelStyle?: StyleProp<TextStyle>;
+  labelContainerStyle?: StyleProp<ViewStyle>;
+  leftLabelStyle?: StyleProp<TextStyle>;
+  rightLabelStyle?: StyleProp<TextStyle>;
   contentContainerStyle?: StyleProp<ViewStyle>;
   avatarContainerStyle?: StyleProp<ViewStyle>;
   avatarTextStyle?: StyleProp<TextStyle>;
@@ -20,7 +23,7 @@ export type ReceiverComponentStyles = {
   accountNumberStyle?: StyleProp<TextStyle>;
 };
 
-const ReceiverComponent = ({ style, name, accountNumber }: ReceiverComponentProps) => {
+const ReceiverComponent = ({ style, name, accountNumber, onEdit }: ReceiverComponentProps) => {
   const styles: ReceiverComponentStyles = useMergeStyles(style);
   const { i18n } = useContext(ThemeContext);
 
@@ -34,7 +37,16 @@ const ReceiverComponent = ({ style, name, accountNumber }: ReceiverComponentProp
 
   return (
     <View style={styles.containerStyle}>
-      <Text style={styles.labelStyle}>{i18n?.t('input_amount_component.lbl_to') ?? 'To :'}</Text>
+      <View style={styles.labelContainerStyle}>
+        <Text style={styles.leftLabelStyle}>
+          {i18n?.t('input_amount_component.lbl_to') ?? 'To :'}
+        </Text>
+        <TouchableOpacity activeOpacity={0.8} onPress={onEdit}>
+          <Text style={styles.rightLabelStyle}>
+            {i18n?.t('input_amount_component.btn_edit') ?? 'Edit'}
+          </Text>
+        </TouchableOpacity>
+      </View>
       <View style={styles.contentContainerStyle}>
         <View style={styles.avatarContainerStyle}>
           <Text style={styles.avatarTextStyle}>{getShortName()}</Text>

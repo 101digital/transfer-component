@@ -13,6 +13,7 @@ import { ThemeContext } from 'react-native-theme-component';
 import { ArrowRightIcon } from '../../assets/icons';
 import { TransferContext } from '../../context/transfer-context';
 import { PaymentMethod } from '../../type';
+import ErrorConnectComponent, { ErrorConnectComponentStyles } from '../error-connect-component';
 import useMergeStyles from './styles';
 
 export type TransferMethodComponentProps = {
@@ -32,6 +33,7 @@ export type TransferMethodComponentStyles = {
   disableButtonLabelStyle?: StyleProp<TextStyle>;
   disabledTextStyle?: StyleProp<TextStyle>;
   itemSeparatorStyle?: StyleProp<ViewStyle>;
+  errorConnectComponentStyle?: ErrorConnectComponentStyles;
 };
 
 const TransferMethodComponent = ({
@@ -40,14 +42,30 @@ const TransferMethodComponent = ({
   onPressed,
 }: TransferMethodComponentProps) => {
   const styles: TransferMethodComponentStyles = useMergeStyles(style);
-  const { getPaymentMethod, isLoadingPaymentMethod, paymentMethods, setPaymentMethod } = useContext(
-    TransferContext
-  );
+  const {
+    getPaymentMethod,
+    isLoadingPaymentMethod,
+    paymentMethods,
+    setPaymentMethod,
+    errorGetPaymentMethod,
+  } = useContext(TransferContext);
   const { i18n, colors } = useContext(ThemeContext);
 
   useEffect(() => {
     getPaymentMethod();
   }, []);
+
+  if (errorGetPaymentMethod) {
+    return (
+      <ErrorConnectComponent
+        isRefreshing={isLoadingPaymentMethod}
+        onRefresh={() => {
+          getPaymentMethod();
+        }}
+        style={styles.errorConnectComponentStyle}
+      />
+    );
+  }
 
   return (
     <View style={styles.containerStyle}>
@@ -68,7 +86,7 @@ const TransferMethodComponent = ({
             renderItem={({ item }) => (
               <>
                 <TouchableOpacity
-                  disabled={!item.IsActive}
+                  // disabled={!item.IsActive}
                   activeOpacity={0.8}
                   style={
                     item.IsActive ? styles.buttonContainerStyle : styles.disableButtonContainerStyle

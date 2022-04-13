@@ -7,3 +7,5 @@ export * from './search.icon';
 export * from './insta-pay.icon';
 export * from './pesonet.icon';
 export * from './arrow-back.icon';
+export * from './chevrons-down.icon';
+export * from './pen.icon';

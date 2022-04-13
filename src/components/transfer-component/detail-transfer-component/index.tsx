@@ -1,6 +1,7 @@
+import { PenIcon } from '../../../assets/icons';
 import { isEmpty } from 'lodash';
 import React, { useContext } from 'react';
-import { StyleProp, Text, TextStyle, View, ViewStyle } from 'react-native';
+import { StyleProp, Text, TextStyle, TouchableOpacity, View, ViewStyle } from 'react-native';
 import { ThemeContext, useCurrencyFormat } from 'react-native-theme-component';
 import { TransferDetails } from '../../../type';
 import useMergeStyles from './styles';
@@ -8,15 +9,24 @@ import useMergeStyles from './styles';
 export type DetailsTransferComponentProps = {
   details: TransferDetails;
   style?: DetailsTransferComponentStyles;
+  onEditReceiver?: () => void;
+  onEditAmount?: () => void;
 };
 
 export type DetailsTransferComponentStyles = {
   containerStyle?: StyleProp<ViewStyle>;
   labelTextStyle?: StyleProp<TextStyle>;
   valueTextStyle?: StyleProp<TextStyle>;
+  editReceiverButtonStyle?: StyleProp<ViewStyle>;
+  editAmountButtonStyle?: StyleProp<ViewStyle>;
 };
 
-const DetailsTransferComponent = ({ style, details }: DetailsTransferComponentProps) => {
+const DetailsTransferComponent = ({
+  style,
+  details,
+  onEditAmount,
+  onEditReceiver,
+}: DetailsTransferComponentProps) => {
   const styles: DetailsTransferComponentStyles = useMergeStyles(style);
   const { colors, i18n } = useContext(ThemeContext);
 
@@ -28,13 +38,24 @@ const DetailsTransferComponent = ({ style, details }: DetailsTransferComponentPr
       <Text style={styles.labelTextStyle}>
         {i18n?.t('detail_transfer_component.lbl_from') ?? 'From'}
       </Text>
-      <Text style={styles.valueTextStyle}>My Pitaka</Text>
-      <Text style={styles.labelTextStyle}>
-        {i18n?.t('detail_transfer_component.lbl_send_money_to') ?? 'Send money to'}
-      </Text>
-      {details.bankName && <Text style={styles.valueTextStyle}>{details.bankName}</Text>}
-      <Text style={styles.valueTextStyle}>{details.accountName}</Text>
-      <Text style={styles.valueTextStyle}>{details.accountNumber}</Text>
+      <Text style={styles.valueTextStyle}>{'My Pitaka'}</Text>
+      <View>
+        <Text style={styles.labelTextStyle}>
+          {i18n?.t('detail_transfer_component.lbl_send_money_to') ?? 'Send money to'}
+        </Text>
+        {details.bankName && <Text style={styles.valueTextStyle}>{details.bankName}</Text>}
+        <Text style={styles.valueTextStyle}>{details.accountName}</Text>
+        <Text style={styles.valueTextStyle}>{details.accountNumber}</Text>
+        {onEditReceiver && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.editReceiverButtonStyle}
+            onPress={onEditReceiver}
+          >
+            <PenIcon width={20} height={20} />
+          </TouchableOpacity>
+        )}
+      </View>
       {!isEmpty(_purpose) && (
         <>
           <Text style={styles.labelTextStyle}>
@@ -66,12 +87,24 @@ const DetailsTransferComponent = ({ style, details }: DetailsTransferComponentPr
           <Text style={styles.valueTextStyle}>{details.charge?.Provider}</Text>
         </>
       )}
-      <Text style={styles.labelTextStyle}>
-        {i18n?.t('detail_transfer_component.lbl_amount') ?? 'Amount'}
-      </Text>
-      <Text style={styles.valueTextStyle}>
-        {useCurrencyFormat(details.amount ?? 0, details.currencyCode ?? 'USD')}
-      </Text>
+      <View>
+        <Text style={styles.labelTextStyle}>
+          {i18n?.t('detail_transfer_component.lbl_amount') ?? 'Amount'}
+        </Text>
+        <Text style={styles.valueTextStyle}>
+          {useCurrencyFormat(details.amount ?? 0, details.currencyCode ?? 'USD')}
+        </Text>
+        {onEditAmount && (
+          <TouchableOpacity
+            activeOpacity={0.8}
+            style={styles.editAmountButtonStyle}
+            onPress={onEditAmount}
+          >
+            <PenIcon width={20} height={20} />
+          </TouchableOpacity>
+        )}
+      </View>
+
       <Text style={styles.labelTextStyle}>
         {i18n?.t('detail_transfer_component.lbl_transaction_fee') ?? 'Transaction Fee'}
       </Text>

@@ -9,6 +9,7 @@ export type ContactItemComponentProps = {
   arrowRightIcon?: ReactNode;
   onPressed: (recipient: Recipient) => void;
   style?: ContactItemComponentStyles;
+  isSelected?: boolean;
 };
 
 export type ContactItemComponentStyles = {
@@ -18,6 +19,8 @@ export type ContactItemComponentStyles = {
   accountContainerStyle?: StyleProp<ViewStyle>;
   accountNameStyle?: StyleProp<TextStyle>;
   accountNumberStyle?: StyleProp<TextStyle>;
+  radioContainerStyle?: StyleProp<ViewStyle>;
+  radioInnerContainerStyle?: StyleProp<ViewStyle>;
 };
 
 const ContactItemComponent = ({
@@ -25,6 +28,7 @@ const ContactItemComponent = ({
   onPressed,
   arrowRightIcon,
   style,
+  isSelected,
 }: ContactItemComponentProps) => {
   const styles: ContactItemComponentStyles = useMergeStyles(style);
   const getShortName = () => {
@@ -48,7 +52,13 @@ const ContactItemComponent = ({
         <Text style={styles.accountNameStyle}>{recipient.displayName}</Text>
         <Text style={styles.accountNumberStyle}>{recipient.accountNumber}</Text>
       </View>
-      {arrowRightIcon ?? <ArrowRightIcon size={12} color={'#FF9800'} />}
+      {isSelected === undefined ? (
+        arrowRightIcon ?? <ArrowRightIcon size={12} color={'#FF9800'} />
+      ) : (
+        <View style={styles.radioContainerStyle}>
+          {isSelected && <View style={styles.radioInnerContainerStyle} />}
+        </View>
+      )}
     </TouchableOpacity>
   );
 };

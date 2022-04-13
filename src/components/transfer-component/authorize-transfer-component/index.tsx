@@ -25,7 +25,6 @@ const AuthorizeTransferComponent = ({ style }: AuthorizeTransferComponentProps) 
   const { authorizeTransfer, clearTransferResponse, resendOtp, isSentOtp } =
     useContext(TransferContext);
   const [value, setValue] = useState('');
-
   const { colors, i18n } = useContext(ThemeContext);
 
   useEffect(() => {

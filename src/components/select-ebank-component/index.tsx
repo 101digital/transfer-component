@@ -5,8 +5,8 @@ import { KeyboardAwareFlatList } from 'react-native-keyboard-aware-scroll-view';
 import { ThemeContext } from 'react-native-theme-component';
 import { TransferContext } from '../../context/transfer-context';
 import { EBank, GroupEBank } from '../../type';
-import ItemEBankComponent from './components/item-ebank-component';
-import SearchField from './components/search-field';
+import ItemEBankComponent, { ItemEBankComponentStyles } from './components/item-ebank-component';
+import SearchField, { SearchFieldStyles } from './components/search-field';
 import useMergeStyles from './styles';
 
 export type SelectEBankComponentProps = {
@@ -22,6 +22,8 @@ export type SelectEBankComponentStyles = {
   eBankListStyle?: StyleProp<ViewStyle>;
   sectionTextStyle?: StyleProp<TextStyle>;
   loadingIndicatorStyle?: StyleProp<ViewStyle>;
+  searchFieldComponentStyle?: SearchFieldStyles;
+  itemEbankComponentStyle?: ItemEBankComponentStyles;
 };
 
 const SelectEBankComponent = ({ style, onNext }: SelectEBankComponentProps) => {
@@ -84,11 +86,13 @@ const SelectEBankComponent = ({ style, onNext }: SelectEBankComponentProps) => {
         {i18n?.t('select_ewallet_component.lbl_header_subtitle') ?? 'Select a bank or ewallet.'}
       </Text>
       <SearchField
-        style={{
-          containerStyle: {
-            marginTop: 17,
-          },
-        }}
+        style={
+          styles.searchFieldComponentStyle ?? {
+            containerStyle: {
+              marginTop: 17,
+            },
+          }
+        }
         onSearch={(key) => {
           setGroupEBank(_handleSearch(key));
         }}
@@ -104,7 +108,7 @@ const SelectEBankComponent = ({ style, onNext }: SelectEBankComponentProps) => {
         <KeyboardAwareFlatList
           keyExtractor={(item) => item.section}
           data={groupEBanks}
-          keyboardShouldPersistTaps='handled'
+          keyboardShouldPersistTaps="handled"
           style={styles.eBankListStyle}
           showsVerticalScrollIndicator={false}
           keyboardOpeningTime={Number.MAX_SAFE_INTEGER}
@@ -116,9 +120,8 @@ const SelectEBankComponent = ({ style, onNext }: SelectEBankComponentProps) => {
                   <ItemEBankComponent
                     key={ebank.id}
                     eBank={ebank}
-                    onPressed={() => {
-                      onNext(ebank);
-                    }}
+                    onPressed={() => onNext(ebank)}
+                    style={styles.itemEbankComponentStyle}
                   />
                 ))}
               </>

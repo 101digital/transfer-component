@@ -1,3 +1,4 @@
+import { addAlpha } from './../../../../../../node_modules/react-native-theme-component/src/colors';
 import { defaultsDeep } from 'lodash';
 import { useContext } from 'react';
 import { StyleSheet } from 'react-native';
@@ -10,7 +11,6 @@ const useMergeStyles = (style?: InputAmountComponentStyles): InputAmountComponen
   const defaultStyles: InputAmountComponentStyles = StyleSheet.create({
     containerStyle: {
       flex: 1,
-      backgroundColor: colors.appBarBackgroundColor,
     },
     contentContainerStyle: {
       marginHorizontal: 24,
@@ -20,13 +20,21 @@ const useMergeStyles = (style?: InputAmountComponentStyles): InputAmountComponen
       fontSize: 12,
       lineHeight: 21,
       fontFamily: fonts.medium,
-      color: colors.primaryTextColor,
+      color: '#ffffff',
       marginBottom: 3,
       marginTop: 20,
     },
     footerContainerStyle: {
       padding: 24,
-      backgroundColor: 'rgba(246, 250, 255, 0.8)',
+      backgroundColor: addAlpha(colors.primaryColor!, 0.8),
+    },
+    countLengthStyle: {
+      fontFamily: fonts.medium,
+      fontSize: 12,
+      lineHeight: 21,
+      color: '#ffffff',
+      marginTop: 8,
+      textAlign: 'right',
     },
   });
 

@@ -9,7 +9,7 @@ const useMergeStyles = (style?: ReviewTransferComponentStyles): ReviewTransferCo
     },
     footerContainerStyle: {
       padding: 24,
-      backgroundColor: 'rgba(246, 250, 255, 0.8)',
+      backgroundColor: 'rgba(246, 250, 255, 1)',
       shadowColor: 'grey',
       shadowOpacity: 0.2,
       shadowOffset: {
@@ -17,7 +17,7 @@ const useMergeStyles = (style?: ReviewTransferComponentStyles): ReviewTransferCo
         height: -10,
       },
       shadowRadius: 10,
-      elevation: 5,
+      elevation: 1,
     },
     contentContainerStyle: {
       flex: 1,
