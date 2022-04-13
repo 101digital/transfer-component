@@ -22,5 +22,3 @@ Make sure you have permission to access this repository
 Because **transfer-component** depends on some libraries, so make sure you installed all dependencies into your project.
 
 - [react-native-theme-component](https://github.com/101digital/react-native-theme-component.git)
-- [react-native-permission](https://github.com/zoontek/react-native-permissions)
-- [react-native-select-contact](https://github.com/streem/react-native-select-contact). If the library not working on Android, please check this [issues](https://github.com/streem/react-native-select-contact/issues/53#issuecomment-940261851)
