@@ -25,6 +25,7 @@ export type SelectUDAccountComponentProps = {
   onNewRecipient: () => void;
   onSelectedRecipient: (recipient: Recipient) => void;
   arrowRightIcon?: ReactNode;
+  disableColor?: string;
   style?: SelectUDAccountComponentStyles;
 };
 
@@ -49,10 +50,12 @@ const SelectUDAccountComponent = ({
   onNewRecipient,
   onSelectedRecipient,
   arrowRightIcon,
+  disableColor,
 }: SelectUDAccountComponentProps) => {
   const styles: SelectUDAccountComponentStyles = useMergeStyles(style);
-  const { contacts, getContacts, isLoadingContacts, errorLoadContacts } =
-    useContext(TransferContext);
+  const { contacts, getContacts, isLoadingContacts, errorLoadContacts } = useContext(
+    TransferContext
+  );
   const [isShowViewAll, setShowViewAll] = useState(false);
   const { i18n, colors } = useContext(ThemeContext);
 
@@ -71,6 +74,8 @@ const SelectUDAccountComponent = ({
       />
     );
   }
+
+  const _viewAllColor = contacts.length < 6 ? disableColor ?? '#BAB7BB' : colors.primaryColor;
 
   return (
     <>
@@ -98,8 +103,12 @@ const SelectUDAccountComponent = ({
             <Text style={styles.recentContactTitleStyle}>
               {i18n?.t('select_ud_account_component.lbl_recent_contact') ?? 'Recent Contacts'}
             </Text>
-            <TouchableOpacity activeOpacity={0.8} onPress={() => setShowViewAll(true)}>
-              <Text style={styles.viewAllTextStyle}>
+            <TouchableOpacity
+              disabled={contacts.length < 6}
+              activeOpacity={0.8}
+              onPress={() => setShowViewAll(true)}
+            >
+              <Text style={[styles.viewAllTextStyle, { color: _viewAllColor }]}>
                 {i18n?.t('select_ud_account_component.btn_view_all') ?? 'View all'}
               </Text>
             </TouchableOpacity>
@@ -115,7 +124,7 @@ const SelectUDAccountComponent = ({
             <FlatList
               keyExtractor={(item, index) => `${index}-${item.paymentReference}`}
               data={contacts.slice(0, 5)}
-              keyboardShouldPersistTaps="handled"
+              keyboardShouldPersistTaps='handled'
               renderItem={({ item }) => (
                 <ContactItemComponent
                   recipient={item}

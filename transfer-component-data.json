@@ -246,7 +246,8 @@
   ],
   "texts": {
     "input_transfer_component": {
-      "lbl_header_title": "Send now to",
+      "lbl_header_title_pesonet": "Send now, receive later",
+      "lbl_header_title_instapay": "Send now to",
       "lbl_header_subtitle": "Please enter recipient's details below.",
       "lbl_account_number": "Account number",
       "plh_account_number": "Enter account number",
@@ -262,18 +263,28 @@
       "lbl_header_title": "Enter amount to send",
       "lbl_enter_amount": "Enter amount (min. of %s)",
       "plh_enter_amount": "%s",
-      "lbl_note": "Note to recipient (Optional)",
+      "lbl_note": "Note to recipient (optional)",
       "plh_note": "Add note",
       "btn_proceed": "Proceed",
       "lbl_to": "To :",
       "lbl_send_via": "Send via",
       "lbl_transfer_fee": "Transfer Fee",
-      "lbl_free": "FREE"
+      "lbl_free": "FREE",
+      "lbl_balance": "My Pitaka Balance:",
+      "btn_edit": "Edit",
+      "msg_not_found_wallet": "Not found wallet details",
+      "msg_recipient_invalid": "Recipient is invalid, please check again"
     },
     "review_transfer_component": {
       "lbl_header_title": "Review transfer",
       "lbl_header_subtitle": "Please make sure all account details are correct. Your account will be debited and this transaction will be irreversible once confirmed.",
-      "btn_confirm_transaction": "Confirm transaction"
+      "btn_confirm_transaction": "Confirm transaction",
+      "btn_cancel": "Cancel",
+      "lbl_cancel_dialog_title": "Cancel Transfer",
+      "msg_cancel_dialog_message": "Do you wish to cancel this payment?\nAll details will be discarded if you cancel this transaction.",
+      "btn_cancel_transfer": "Yes, cancel transfer",
+      "btn_continue_transfer": "No, continue transfer",
+      "lbl_something_went_wrong": "Something went wrong"
     },
     "detail_transfer_component": {
       "lbl_from": "From",
@@ -302,7 +313,8 @@
       "msg_transfer_unsuccessful": "Your money has been returned to your Pitaka. Please try again at a later time.",
       "btn_back_to_top": "Back to My Pitaka",
       "lbl_transfer_successful": "Transfer Request\nSuccessful!",
-      "msg_transfer_successful": "Your money is on its way and should arrive instantly.",
+      "msg_transfer_successful_instantly": "Your money is on its way and should arrive instantly.",
+      "msg_transfer_successful_later": "Your money is on its way and recipient should receive it %s",
       "lbl_transaction_date": "Transaction Date / Time",
       "lbl_reference_no": "Reference No.",
       "btn_add_contact": "Add to contacts",
@@ -314,7 +326,12 @@
       "lbl_header_subtitle": "Who are you sending your money to?",
       "btn_new_recipient": "New Recipient",
       "lbl_recent_contact": "Recent Contacts",
-      "btn_view_all": "View all"
+      "btn_view_all": "View all",
+      "msg_empty_contact": "You have no saved\ncontact as of this moment.",
+      "lbl_contact_title": "Contacts",
+      "lbl_contact_subtitle": "Select send money recipient.",
+      "plh_search_contact": "Search contacts",
+      "btn_select": "Select"
     },
     "new_recipient_component": {
       "lbl_header_title": "New Recipient",
@@ -326,7 +343,13 @@
       "lbl_account_number": "UD account number",
       "plh_mobile_number": "ex. 09123456789 or +639123456789",
       "plh_account_number": "Enter UD account number",
-      "btn_proceed": "Proceed"
+      "btn_proceed": "Proceed",
+      "lbl_permission_required": "Need contacts permission",
+      "msg_permission_required": "The app needs permission in order to select from contacts. Please adjust this in your settings.",
+      "btn_open_settings": "Go to Settings",
+      "btn_cancel": "Cancel",
+      "lbl_something_went_wrong": "Something went wrong",
+      "btn_select_device_contact": "Select from device contact"
     },
     "transfer_method_component": {
       "lbl_header_title": "Send Money",
@@ -338,6 +361,11 @@
       "lbl_header_subtitle": "Select a bank or ewallet.",
       "plh_search": "Search for a bank or ewallet",
       "msg_bank_unavailable": "Bank is currently not available"
+    },
+    "error_connect_component": {
+      "lbl_error_title": "Something went wrong",
+      "msg_error_message": "We're having difficulty trying to\nconnect to our server. Please try again.",
+      "btn_swipe_down": "Swipe down to refresh"
     }
   }
 }

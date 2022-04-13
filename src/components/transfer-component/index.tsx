@@ -158,8 +158,8 @@ const TransferComponent = forwardRef((props: TransferComponentProps, ref) => {
       if (isEmpty(recipient.accountNumber) || isEmpty(recipient.paymentReference)) {
         showMessage({
           message:
-            i18n?.t('input_amount_component.msg_receipient_invalid') ??
-            'Receipient is invalid, please check again',
+            i18n?.t('input_amount_component.msg_recipient_invalid') ??
+            'Recipient is invalid, please check again',
           backgroundColor: '#ff0000',
         });
         onCancel();
