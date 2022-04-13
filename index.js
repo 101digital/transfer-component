@@ -7,3 +7,4 @@ export { default as SelectUDAccountComponent } from './src/components/select-ud-
 export { default as NewRecipientComponent } from './src/components/new-recipient-component';
 export { default as SelectEBankComponent } from './src/components/select-ebank-component';
 export { default as TransferMethodComponent } from './src/components/transfer-method-component';
+export { default as ShareScreenshotComponent } from './src/components/share-transfer-component';
