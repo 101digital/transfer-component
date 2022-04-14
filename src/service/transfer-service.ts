@@ -68,10 +68,14 @@ export class TransferService {
     }
   };
 
-  public addContact = async (accountId: string, accountNumber: string, displayName: string) => {
+  public addContact = async (
+    paymentReference: string,
+    accountNumber: string,
+    displayName: string
+  ) => {
     if (this._contactClient) {
       const response = await this._contactClient.post('contacts', {
-        accountId,
+        paymentReference,
         accountNumber,
         displayName,
       });
